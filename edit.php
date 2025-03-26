@@ -1,6 +1,9 @@
 <?php
 require_once('Models/Product.php');
 require_once("components/Footer.php");
+require_once("Models/Database.php");
+$dbContext = new Database();
+$product = $dbContext->getProductById($_GET['id']);
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +34,7 @@ require_once("components/Footer.php");
                                 <li><a class="dropdown-item" href="#!">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                     <?php
-                                    foreach(getAllCategories() as $cat){
+                                    foreach($dbContext->getAllCategories() as $cat){
                                         echo "<li><a class='dropdown-item' href='#!'>$cat</a></li>";
                                     } 
                                     ?> 
@@ -56,18 +59,16 @@ require_once("components/Footer.php");
 
     <?php
 
-    $id = $_GET['id'];
-    // Hämta den produkt med detta ID
-    $product = getProduct($id); // TODO felhantering om inget produkt
-
-
+ 
     if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         // Här kommer vi när man har tryckt  på SUBMIT
         // IMORGON TISDAG SÅ UPDATE PRODUCT SET title = $_POST['title'] WHERE id = $id
+ 
         $product->title = $_POST['title'];
         $product->stockLevel = $_POST['stockLevel'];
         $product->price = $_POST['price'];
         $product->categoryName = $_POST['categoryName'];
+        $dbContext->updateProduct($product);
         echo "<h1>Produkten har uppdaterats</h1>";
     }else{
         // Det är INTE ett formulär som har postats - utan man har klickat in på länk tex edit.php?id=12
