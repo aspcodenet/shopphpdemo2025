@@ -66,6 +66,7 @@ $sortOrder = $_GET['sortOrder'] ?? "";
         <!-- Section-->
         <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
+            <a href="/admin/new" class="btn btn-primary">Create new</a>
             <table class="table">
                 <thead>
                         <th>Name
