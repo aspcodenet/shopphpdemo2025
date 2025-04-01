@@ -38,7 +38,7 @@ $dbContext = new Database();
                                 <li><hr class="dropdown-divider" /></li>
                                     <?php
                                     foreach($dbContext->getAllCategories() as $cat){
-                                        echo "<li><a class='dropdown-item' href='category.php?catname=$cat'>$cat</a></li>";
+                                        echo "<li><a class='dropdown-item' href='/category?catname=$cat'>$cat</a></li>";
                                     } 
                                     ?> 
                                     <li><a class="dropdown-item" href="#!">En cat</a></li>

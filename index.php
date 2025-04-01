@@ -5,23 +5,33 @@
 // om url = "/edit" så visa edit.php
 // om url = "/" så visa index.php
 
+require_once("Utils/router.php"); // LADDAR IN ROUTER KLASSEN
+require_once("vendor/autoload.php"); // LADDA ALLA DEPENDENCIES FROM VENDOR
+//  :: en STATIC funktion
+$dotenv = Dotenv\Dotenv::createImmutable("."); // . is  current folder for the PAGE
+$dotenv->load();
+// Pilar istf .
+// \ istf .
+
+// import * as dotenv from 'dotenv';
+
+
 
 $router = new Router();
 $router->addRoute('/', function () {
-    require __DIR__ .'/Pages/index.php';
+    require_once( __DIR__ .'/Pages/index.php');
 });
 $router->addRoute('/category', function () {
-    require __DIR__ .'/Pages/category.php';
+    require_once( __DIR__ .'/Pages/category.php');
 });
 $router->addRoute('/admin/admin', function () {
-    require __DIR__ .'/Pages/admin.php';
+    require_once( __DIR__ .'/Pages/admin.php' );
 });
 $router->addRoute('/admin/edit', function () {
-    require __DIR__ .'/Pages/edit.php';
+    require_once( __DIR__ .'/Pages/edit.php');
 });
 
 $router->dispatch();
 ?>
 
 
-?>

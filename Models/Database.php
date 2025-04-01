@@ -1,18 +1,10 @@
 <?php 
-    require_once("vendor/autoload.php"); // LADDA ALLA DEPENDENCIES FROM VENDOR
 
 // Hur kan man strukturera klasser
 // Hir kan man struktirera filer? Folders + subfolders
 // NAMESPACES       
 
 // LÄS IN ALLA  .env VARIABLER till $_ENV i PHP
-//  :: en STATIC funktion
-$dotenv = Dotenv\Dotenv::createImmutable("."); // . is  current folder for the PAGE
-$dotenv->load();
-// Pilar istf .
-// \ istf .
-
-// import * as dotenv from 'dotenv';
 
 
 

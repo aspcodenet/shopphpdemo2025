@@ -98,7 +98,7 @@ $sortOrder = $_GET['sortOrder'] ?? "";
                         <td><?php echo $prod->categoryName; ?></td>
                         <td><?php echo $prod->price; ?></td>
                         <td><?php echo $prod->stockLevel; ?></td>
-                        <td><a href="edit.php?id=<?php echo $prod->id; ?>" class="btn btn-primary">Edit</a></td>
+                        <td><a href="edit?id=<?php echo $prod->id; ?>" class="btn btn-primary">Edit</a></td>
                     </tr>
                 <?php } ?>
                 </tbody>
