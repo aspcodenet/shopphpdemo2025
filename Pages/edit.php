@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     // IMORGON TISDAG SÅ UPDATE PRODUCT SET title = $_POST['title'] WHERE id = $id
     $product->title = $_POST['title'];
     $product->stockLevel = $_POST['stockLevel'];
+    
     $product->price = $_POST['price'];
     $product->categoryName = $_POST['categoryName'];
     $dbContext->updateProduct($product);

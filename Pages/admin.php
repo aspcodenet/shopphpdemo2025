@@ -70,22 +70,22 @@ $sortOrder = $_GET['sortOrder'] ?? "";
             <table class="table">
                 <thead>
                         <th>Name
-                            <a href="admin.php?sortCol=title&sortOrder=asc"><i class="bi bi-arrow-down-circle-fill"></i></a>
-                            <a href="admin.php?sortCol=title&sortOrder=desc"><i class="bi bi-arrow-up-circle-fill"></i></a>
+                            <a href="/admin/products?sortCol=title&sortOrder=asc"><i class="bi bi-arrow-down-circle-fill"></i></a>
+                            <a href="/admin/products?sortCol=title&sortOrder=desc"><i class="bi bi-arrow-up-circle-fill"></i></a>
                         </th>
                         <th>Category
-                        <a href="admin.php?sortCol=categoryName&sortOrder=asc"><i class="bi bi-arrow-down-circle-fill"></i></a>
-                            <a href="admin.php?sortCol=categoryName&sortOrder=desc"><i class="bi bi-arrow-up-circle-fill"></i></a>  
+                        <a href="/admin/products?sortCol=categoryName&sortOrder=asc"><i class="bi bi-arrow-down-circle-fill"></i></a>
+                            <a href="/admin/products?sortCol=categoryName&sortOrder=desc"><i class="bi bi-arrow-up-circle-fill"></i></a>  
                         </th>
                         <th>Price
-                        <a href="admin.php?sortCol=price&sortOrder=asc"><i class="bi bi-arrow-down-circle-fill"></i></a>
-                            <a href="admin.php?sortCol=price&sortOrder=desc">
+                        <a href="/admin/products?sortCol=price&sortOrder=asc"><i class="bi bi-arrow-down-circle-fill"></i></a>
+                            <a href="/admin/products?sortCol=price&sortOrder=desc">
                                 <i class="bi bi-arrow-up-circle-fill"></i>
                             </a>
                         </th>
                         <th>Stock level
-                        <a href="admin.php?sortCol=stockLevel&sortOrder=asc"><i class="bi bi-arrow-down-circle-fill"></i></a>
-                            <a href="admin.php?sortCol=stockLevel&sortOrder=desc">
+                        <a href="/admin/products?sortCol=stockLevel&sortOrder=asc"><i class="bi bi-arrow-down-circle-fill"></i></a>
+                            <a href="/admin/products?sortCol=stockLevel&sortOrder=desc">
                                 <i class="bi bi-arrow-up-circle-fill"></i>
                             </a>
                         </th>
