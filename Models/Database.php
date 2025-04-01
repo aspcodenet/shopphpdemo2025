@@ -21,6 +21,8 @@ $dotenv->load();
         // I $pdo finns nu funktioner (dvs metoder!) som kan användas för att kommunicera med databasen
         
         // Note to Stefan STATIC så inte initieras varje gång
+        
+        // SKILJ PÅ CONFIGURATION OCH KOD
 
         function __construct() {    
             $host = $_ENV['HOST'];

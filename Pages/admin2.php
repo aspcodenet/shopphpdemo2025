@@ -18,24 +18,24 @@ $sortOrder = $_GET['sortOrder'] ?? "";
         <table border="1">
             <tr>
                 <th>
-                    <a href="admin2.php?sortCol=title&sortOrder=desc">UP</a>
+                    <a href="admin2.php?sortCol=title&sortOrder=asc">UP</a>
                     Title
-                    <a href="admin2.php?sortCol=title&sortOrder=asc">DOWN</a>
+                    <a href="admin2.php?sortCol=title&sortOrder=desc">DOWN</a>
                 </th>
                 <th>
-                    <a href="admin2.php?sortCol=price&sortOrder=desc">UP</a>
+                    <a href="admin2.php?sortCol=price&sortOrder=asc">UP</a>
                     Price
-                    <a href="admin2.php?sortCol=price&sortOrder=asc">DOWN</a>
+                    <a href="admin2.php?sortCol=price&sortOrder=desc">DOWN</a>
                 </th>
                 <th>
-                    <a href="admin2.php?sortCol=stockLevel&sortOrder=desc">UP</a>
+                    <a href="admin2.php?sortCol=stockLevel&sortOrder=asc">UP</a>
                     Stock Level
-                    <a href="admin2.php?sortCol=stockLevel&sortOrder=asc">DOWN</a>
+                    <a href="admin2.php?sortCol=stockLevel&sortOrder=desc">DOWN</a>
                 </th>
                 <th>
-                    <a href="admin2.php?sortCol=categoryName&sortOrder=desc">UP</a>
+                    <a href="admin2.php?sortCol=categoryName&sortOrder=asc">UP</a>
                     Category name
-                    <a href="admin2.php?sortCol=categoryName&sortOrder=asc">DOWN</a>
+                    <a href="admin2.php?sortCol=categoryName&sortOrder=desc">DOWN</a>
                 </th>
             </tr>
             <?php
