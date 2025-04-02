@@ -62,6 +62,12 @@
             return $query->fetch();
         }
 
+
+        function deleteProduct($id) {
+            $query = $this->pdo->prepare("DELETE FROM Products WHERE id = :id");
+            $query->execute(['id' => $id]);
+        }
+
         function updateProduct($product){
             $s = "UPDATE Products SET title = :title," .
                 " price = :price, stockLevel = :stockLevel, categoryName = :categoryName WHERE id = :id";
