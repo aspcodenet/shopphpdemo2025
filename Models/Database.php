@@ -81,7 +81,7 @@
 
         //function getAllProducts($sortCol, $sortOrder){
         function getAllProducts($sortCol="id", $sortOrder= "asc"){
-            if(!in_array($sortCol,["id", "title","price","stockLevel"])){
+            if(!in_array($sortCol,["id", "categoryName",  "title","price","stockLevel"])){
                 $sortCol = "id";
             }
             if(!in_array($sortOrder,["asc", "desc"])){
