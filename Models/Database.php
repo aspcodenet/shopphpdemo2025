@@ -97,6 +97,16 @@
             $query = $this->pdo->query("SELECT * FROM Products ORDER BY $sortCol $sortOrder"); // Products är TABELL 
             return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
         }
+
+        function getCategoryProducts($catName){
+            if($catName == ""){
+                $query = $this->pdo->query("SELECT * FROM Products"); // Products är TABELL 
+                return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
+            }
+            $query = $this->pdo->prepare("SELECT * FROM Products WHERE categoryName = :categoryName");
+            $query->execute(['categoryName' => $catName]);
+            return $query->fetchAll(PDO::FETCH_CLASS, 'Product');
+        }
         function getAllCategories(){
                 // SELECT DISTINCT categoryName FROM Products
             $data = $this->pdo->query('SELECT DISTINCT categoryName FROM Products')->fetchAll(PDO::FETCH_COLUMN);
