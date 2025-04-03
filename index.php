@@ -33,6 +33,9 @@ $router->addRoute('/admin/edit', function () {
 $router->addRoute('/admin/new', function () {
     require_once( __DIR__ .'/Pages/new.php');
 });
+$router->addRoute('/admin/delete', function () {
+    require_once( __DIR__ .'/Pages/delete.php');
+});
 
 $router->dispatch();
 ?>
