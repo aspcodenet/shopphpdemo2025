@@ -37,6 +37,11 @@ $router->addRoute('/admin/delete', function () {
     require_once( __DIR__ .'/Pages/delete.php');
 });
 
+$router->addRoute('/user/login', function () {
+    require_once( __DIR__ .'/Pages/users/login.php');
+});
+
+
 $router->dispatch();
 ?>
 

@@ -1,5 +1,7 @@
 <?php 
 
+require_once('Models/UserDatabase.php');
+
 // Hur kan man strukturera klasser
 // Hir kan man struktirera filer? Folders + subfolders
 // NAMESPACES       
@@ -11,6 +13,12 @@
     class Database{
         public $pdo; // PDO är PHP Data Object - en klass som finns i PHP för att kommunicera med databaser
         // I $pdo finns nu funktioner (dvs metoder!) som kan användas för att kommunicera med databasen
+
+        private $usersDatabase;
+        function getUsersDatabase(){
+            return $this->usersDatabase;
+        }        
+
         
         // Note to Stefan STATIC så inte initieras varje gång
         
@@ -27,6 +35,7 @@
             $this->pdo = new PDO($dsn, $user, $pass);
             $this->initDatabase();
             $this->initData();
+            $this->usersDatabase = new UserDatabase($this->pdo);
         }
         function initData(){
             // if select count(*) from Products = 0
@@ -41,7 +50,6 @@
                 $this->pdo->query("INSERT INTO Products (title, price, stockLevel, categoryName) VALUES ('Cucumber', 15, 30, 'Vegetable')");
                 $this->pdo->query("INSERT INTO Products (title, price, stockLevel, categoryName) VALUES ('Tomato', 20, 40, 'Vegetable')");
                 $this->pdo->query("INSERT INTO Products (title, price, stockLevel, categoryName) VALUES ('Carrot', 10, 20, 'Vegetable')");
-
             }
         }
 
