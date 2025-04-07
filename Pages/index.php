@@ -6,6 +6,8 @@ require_once("components/Footer.php");
 require_once("Models/Database.php");
 
 $dbContext = new Database();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -43,9 +45,19 @@ $dbContext = new Database();
                                     ?> 
                             </ul> 
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="/user/login">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Create account</a></li>
+                        <?php
+                        if($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()){ ?>
+                            <li class="nav-item"><a class="nav-link" href="/user/logout">Logout</a></li>
+                        <?php }else{ ?>
+                            <li class="nav-item"><a class="nav-link" href="/user/login">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#!">Create account</a></li>
+                        <?php 
+                        }
+                        ?>
                     </ul>
+                    <?php if($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()){ ?>
+                        Current user: <?php echo $dbContext->getUsersDatabase()->getAuth()->getUsername() ?>
+                    <?php } ?>
                     <form class="d-flex">
                         <button class="btn btn-outline-dark" type="submit">
                             <i class="bi-cart-fill me-1"></i>
