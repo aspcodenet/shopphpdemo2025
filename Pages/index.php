@@ -4,8 +4,10 @@
 require_once("Models/Product.php");
 require_once("components/Footer.php");
 require_once("Models/Database.php");
+require_once("Models/UserDatabase.php");
 
 $dbContext = new Database();
+$usersDatabase = new UserDatabase($dbContext->pdo);
 ?>
 
 <!DOCTYPE html>
@@ -43,8 +45,13 @@ $dbContext = new Database();
                                     ?> 
                             </ul> 
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#!">Create account</a></li>
+                        <?php if($usersDatabase->getAuth()->isLoggedIn()) { ?>
+                            <li class="nav-item"><a class="nav-link" href="/user/logout">Logout</a></li>
+                        <?php } else { ?>
+                            <li class="nav-item"><a class="nav-link" href="/user/login">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#!">Create account</a></li>
+                        <?php } ?>
+
                     </ul>
                     <form class="d-flex">
                         <button class="btn btn-outline-dark" type="submit">
