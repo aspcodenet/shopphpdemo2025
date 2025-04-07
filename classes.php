@@ -1,12 +1,54 @@
 <?php
 
+// ni får se ::
+
+
+// måndagsexemplar 
+
+// Det finns X antal möjliga värden
+// weekday, month, houseType (radhus,villa,lägenhet)
+// playerType (forward,defence,goalie)
+// Räkna upp alla möjliga värden  = ENUM (enumeration)
+
+enum Color{
+    case Red;
+    case Green;
+    case Blue;
+    case Yellow;
+    case Black;
+    case White;
+}
+
+enum Weekday {
+    case Monday;
+    case Tuesday;
+    case Wednesday;
+    case Thursday;
+    case Friday;
+    case Saturday;
+    case Sunday;
+}
+
+// enumnamn :: värde   
+
+
 class House{
     public $color;
     public $year;
 
+    public $createdWeekday; // vilken veckodag skapades huset? 
+
     public $totalSpent; // hur mycket har vi spenderat på renovering
     
     // OOP funktioner ligga inuti klass = metod
+
+    public function isGoodHouse(){
+        if($this->createdWeekday == Weekday::Monday){
+            return false;      
+        }   else {
+            return true;
+        }
+    }
 
 
     // MENINGEN MED EN CONSTUCTOR ÄR
@@ -14,9 +56,10 @@ class House{
     // - se till att VALID STATE gäller 
     //             ( mandatory variabeler som måste finnas)
     //                     REQUIRED
-    public function __construct($color, $year) {   
+    public function __construct($color, $year, $createdWeekday) {   
         $this->color = $color;
         $this->year = $year;
+        $this->createdWeekday = $createdWeekday;
         $this->totalSpent = 0;
     }
 
@@ -26,6 +69,42 @@ class House{
     }
 
 }
+// Alla metoder är funktioner, men alla funktioner är inte metoder? 
+// Lite som att alla kvadrater är rektanglar, men alla rektanglar är inte kvadrater?
+
+// PHP är -> istäälet för .   // MAGIC STRINGS
+$stefansHus = new House(Color::Black,1978, Weekday::Monday); // Jag har egna variabler
+$stefansHus->year = 1978;
+$stefansHus->paint("red");
+if($stefansHus->isGoodHouse() == false){
+    echo "Detta är inte ett bra hus!";
+} else {
+    echo "Detta är ett bra hus!";
+}
+
+$annasHus = new House(Color::White, 1980, Weekday::Sunday); // Anna har egna variablera
+if($annasHus->isGoodHouse() == false){
+    echo "Detta är inte ett bra hus!";
+} else {
+    echo "Detta är ett bra hus!";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 class Garage{ // 
@@ -54,21 +133,12 @@ class Garage{ //
 }
 
 
-// Alla metoder är funktioner, men alla funktioner är inte metoder? 
-// Lite som att alla kvadrater är rektanglar, men alla rektanglar är inte kvadrater?
 
-
-// PHP är -> istäälet för .
-$stefansHus = new House("Brunt",1978); // Jag har egna variabler
-$stefansHus->year = 1978;
-$stefansHus->paint("red");
 $stefansGarage = new Garage("Vitt");
 $stefansGarage->paint("green");
 
 
 
-
-$annasHus = new House("Vitt", 1980); // Anna har egna variablera
 //$annasHus->year = 1980;
 
 // paintGarage($stefansGarage,"red");
