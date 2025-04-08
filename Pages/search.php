@@ -7,6 +7,8 @@ require_once("Models/Database.php");
 
 $dbContext = new Database();
 
+$q = $_GET['q'] ?? ""; // Om det inte finns något q så sätt till null
+
 
 ?>
 
@@ -56,7 +58,7 @@ $dbContext = new Database();
                         ?>
                     </ul>
                     <form method="GET" action="/search" class="d-flex">
-                        <input class="form-control me-2" type="search" name="q" placeholder="Search" value="<?php echo $q; ?>" aria-label="Search" />
+                        <input class="form-control me-2" type="search" name="q" placeholder="Search" value="<?php echo $q; ?>"   aria-label="Search" />
                         <button class="btn btn-outline-dark" type="submit">Search</button>
                         
                     </form>
@@ -87,7 +89,7 @@ $dbContext = new Database();
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 <?php 
-                foreach($dbContext->getPopularProducts() as $prod){
+                foreach($dbContext->searchProducts($q)["data"] as $prod){
                 ?>                    
                     <div class="col mb-5">
                             <div class="card h-100">

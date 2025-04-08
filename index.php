@@ -52,6 +52,10 @@ $router->addRoute('/user/registerThanks', function () {
     require_once( __DIR__ .'/Pages/users/registerThanks.php');
 });
 
+$router->addRoute('/search', function () {
+    require_once( __DIR__ .'/Pages/search.php');
+});
+
 
 $router->dispatch();
 ?>

@@ -14,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $stockLevel = $_POST['stockLevel'];
     $price = $_POST['price'];
     $categoryName = $_POST['categoryName'];
-    $dbContext->insertProduct($title, $stockLevel, $price, $categoryName);
+    $popularityFactor = $_POST['popularityFactor'];
+    $dbContext->insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor);
     header("Location: /admin/products");
     exit;
 }else{
@@ -93,8 +94,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             <input type="text" class="form-control" name="stockLevel" value="">
         </div>
         <div class="form-group">
-            <label for="categpryName">Category name:</label>
+            <label for="categoryName">Category name:</label>
             <input type="text" class="form-control" name="categoryName" value="">
+        </div>
+        <div class="form-group">
+            <label for="popularityFactor">Popularity (0-100):</label>
+            <input type="text" class="form-control" name="popularityFactor" value="">
         </div>
         <input type="submit" class="btn btn-primary" value="Skapa">
     </form>
