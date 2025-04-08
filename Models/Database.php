@@ -37,7 +37,7 @@ require_once('Models/UserDatabase.php');
             $this->initData();
             $this->usersDatabase = new UserDatabase($this->pdo);
             $this->usersDatabase->setupUsers();
-            $this->usersDatabase->seedUsers()
+            $this->usersDatabase->seedUsers();
         }
         function initData(){
             // if select count(*) from Products = 0
