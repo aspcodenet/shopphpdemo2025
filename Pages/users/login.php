@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
     ?>
     <p>Logga in med din email och lösenord</p>
-    <form method="POST" > 
+    <form method="POST" >  
             <div class="form-group">
                 <label for="username">Email</label>
                 <input type="text" class="form-control" name="username" value="<?php echo $username ?>">
