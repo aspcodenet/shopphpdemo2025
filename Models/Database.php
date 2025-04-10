@@ -50,20 +50,22 @@ require_once('Models/UserDatabase.php');
 
 
         function initData(){
-            $this->addProductIfNotExists("Banana", 10, 100, "Fruit");
-            $this->addProductIfNotExists("Apple", 5, 50, "Fruit");
-            $this->addProductIfNotExists("Pear", 7, 70, "Fruit");
-            $this->addProductIfNotExists("Cucumber", 15, 30, "Vegetable");
-            $this->addProductIfNotExists("Tomato", 20, 40, "Vegetable");
-            $this->addProductIfNotExists("Carrot", 10, 20, "Vegetable");
-            $this->addProductIfNotExists("Potato", 5, 50, "Vegetable");
-            $this->addProductIfNotExists("Onion", 7, 70, "Vegetable");
-            $this->addProductIfNotExists("Lettuce", 15, 30, "Vegetable");
-            $this->addProductIfNotExists("Broccoli", 20, 40, "Vegetable");
-            $this->addProductIfNotExists("Spinach", 10, 20, "Vegetable");
-            $this->addProductIfNotExists("Zucchini", 5, 50, "Vegetable");
-            $this->addProductIfNotExists("Eggplant", 7, 70, "Vegetable");
-            $this->addProductIfNotExists("Bell Pepper", 15, 30, "Vegetable");
+            $sql = "SELECT COUNT(*) FROM Products";
+            $res = $this->pdo->query($sql);
+            $count = $res->fetchColumn();
+            if($count > 0){
+                return;
+            }
+            $faker = \Faker\Factory::create();
+            $faker->addProvider(new \Bezhanov\Faker\Provider\Commerce($faker));
+            for($i = 0; $i < 100; $i++){
+                $title = $faker->productName();
+                $price = $faker->numberBetween(1, 100);
+                $stockLevel = $faker->numberBetween(1, 100);
+                $categoryName = $faker->category();
+                $this->addProductIfNotExists($title, $price, $stockLevel, $categoryName);
+            }
+
         }
 
         function initDatabase(){
