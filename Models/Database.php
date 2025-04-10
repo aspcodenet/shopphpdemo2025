@@ -105,8 +105,15 @@ require_once('Models/UserDatabase.php');
         }
 
 
-        function searchProducts($q){
-            $query = $this->pdo->prepare("SELECT * FROM Products WHERE title LIKE :q");
+        function searchProducts($q,$sortCol, $sortOrder){
+            if(!in_array($sortCol,[ "title","price"])){
+                $sortCol = "title";
+            }
+            if(!in_array($sortOrder,["asc", "desc"])){
+                $sortOrder = "asc";
+            }
+
+            $query = $this->pdo->prepare("SELECT * FROM Products WHERE title LIKE :q or categoryName like :q ORDER BY $sortCol $sortOrder"); // Products är TABELL
             $query->execute(['q' => "%$q%"]);
             return $query->fetchAll(PDO::FETCH_CLASS, 'Product');
         }

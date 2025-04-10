@@ -8,6 +8,9 @@ require_once("Models/Database.php");
 $dbContext = new Database();
 
 $q = $_GET['q'] ?? "";
+$sortCol = $_GET['sortCol'] ?? "";
+$sortOrder = $_GET['sortOrder'] ?? "";
+
 ?>
 
 <!DOCTYPE html>
@@ -88,9 +91,17 @@ $q = $_GET['q'] ?? "";
         <!-- Section-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
+                        <a href="?sortCol=title&sortOrder=asc&q=<?php echo $q;?>" class="btn btn-secondary">Title asc</a>
+                        <a href="?sortCol=title&sortOrder=desc&q=<?php echo $q;?>" class="btn btn-secondary">Title desc</a>
+                        <a href="?sortCol=price&sortOrder=asc&q=<?php echo $q;?>" class="btn btn-secondary">Price asc</a>
+                        <a href="?sortCol=price&sortOrder=desc&q=<?php echo $q;?>" class="btn btn-secondary">Price desc</a>
+
+
+
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                
                 <?php 
-                foreach($dbContext->searchProducts($q) as $prod){
+                    foreach($dbContext->searchProducts($q,$sortCol, $sortOrder) as $prod){
                 ?>                    
                     <div class="col mb-5">
                             <div class="card h-100">
