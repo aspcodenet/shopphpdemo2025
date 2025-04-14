@@ -1,12 +1,24 @@
 <?php
 // ONCE = en gång även om det blir cirkelreferenser
 #include_once("Models/Products.php") - OK även om filen inte finns
+
+
+
+
 require_once("Models/Product.php");
 require_once("components/Footer.php");
 require_once("Models/Database.php");
 
 $dbContext = new Database();
 
+
+// POPULÄRA PRODUKTER - product 1 to many reviews text+betyg
+// Vi gör enkelt : i products skapar vi PopularityFactor som är en int mellan 1-100
+// ju högre ju mer populär
+
+// På startsidan så visas de 10 mest populära produkterna
+// Skapa en  getPopularProducts() i Database.php som returnerar en array av produkter
+// select * from products order by popularityFactor desc limit 10	
 
 ?>
 
@@ -58,7 +70,6 @@ $dbContext = new Database();
 
                      <form action="/search" method="GET">
                         <input type="text" name="q" placeholder="Search" class="form-control">
-                        <button class="btn btn-outline-dark" type="submit">Search</button>
                      </form>   
 
 

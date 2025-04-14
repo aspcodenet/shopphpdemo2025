@@ -41,11 +41,11 @@ require_once("vendor/autoload.php");
             $this->usersDatabase->seedUsers();
         }
 
-        function addProductIfNotExists($title, $price, $stockLevel, $categoryName){
+        function addProductIfNotExists($title, $price, $stockLevel, $categoryName,$popularityFactor){
             $query = $this->pdo->prepare("SELECT * FROM Products WHERE title = :title");
             $query->execute(['title' => $title]);
             if($query->rowCount() == 0){
-                $this->insertProduct($title, $stockLevel, $price, $categoryName);
+                $this->insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor);
             }
         }
 
@@ -65,7 +65,8 @@ require_once("vendor/autoload.php");
                 $price = $faker->numberBetween(1, 100);
                 $stockLevel = $faker->numberBetween(1, 100);
                 $categoryName = $faker->category();
-                $this->addProductIfNotExists($title, $price, $stockLevel, $categoryName);
+                $popularityFactor = $faker->numberBetween(1, 100);
+                $this->addProductIfNotExists($title, $price, $stockLevel, $categoryName,$popularityFactor);
             }
 
         }
@@ -76,7 +77,8 @@ require_once("vendor/autoload.php");
                 title VARCHAR(50),
                 price INT,
                 stockLevel INT,
-                categoryName VARCHAR(50)
+                categoryName VARCHAR(50),
+                popularityFactor INT DEFAULT 0,
             )');
         }
 
@@ -89,11 +91,12 @@ require_once("vendor/autoload.php");
 
         function updateProduct($product){
             $s = "UPDATE Products SET title = :title," .
-                " price = :price, stockLevel = :stockLevel, categoryName = :categoryName WHERE id = :id";
+                " price = :price, stockLevel = :stockLevel, categoryName = :categoryName, popularityFactor=:popularityFactor WHERE id = :id";
             $query = $this->pdo->prepare($s);
             $query->execute(['title' => $product->title, 'price' => $product->price,
                 'stockLevel' => $product->stockLevel, 'categoryName' => $product->categoryName, 
-                'id' => $product->id]);
+                'id' => $product->id,
+                'popularityFactor' => $product->popularityFactor]);
         }
 
         function deleteProduct($id){
@@ -101,11 +104,12 @@ require_once("vendor/autoload.php");
             $query->execute(['id' => $id]);
         }
 
-        function insertProduct($title, $stockLevel, $price, $categoryName) {
-            $sql = "INSERT INTO Products (title, price, stockLevel, categoryName) VALUES (:title, :price, :stockLevel, :categoryName)";
+        function insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor) {
+            $sql = "INSERT INTO Products (title, price, stockLevel, categoryName, popularityFactor) VALUES (:title, :price, :stockLevel, :categoryName, :popularityFactor)";
             $query = $this->pdo->prepare($sql);
             $query->execute(['title' => $title, 'price' => $price,
-                'stockLevel' => $stockLevel, 'categoryName' => $categoryName]);
+                'stockLevel' => $stockLevel, 'categoryName' => $categoryName,
+                'popularityFactor' => $popularityFactor]);
         }
 
 
