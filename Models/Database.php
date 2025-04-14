@@ -35,6 +35,7 @@ require_once("vendor/autoload.php");
             $dsn = "mysql:host=$host:$port;dbname=$db"; // connection string
             $this->pdo = new PDO($dsn, $user, $pass);
             $this->initDatabase();
+            $this->modifyDatabase();
             $this->initData();
             $this->usersDatabase = new UserDatabase($this->pdo);
             $this->usersDatabase->setupUsers();
@@ -68,7 +69,19 @@ require_once("vendor/autoload.php");
                 $popularityFactor = $faker->numberBetween(1, 100);
                 $this->addProductIfNotExists($title, $price, $stockLevel, $categoryName,$popularityFactor);
             }
+        }
 
+        function columnExists($pdo, $table, $column) {
+            $stmt = $pdo->prepare("SHOW COLUMNS FROM $table WHERE  field = :column");
+            $stmt->execute(['column' => $column]);
+            return $stmt->rowCount() > 0;
+        }
+
+        function modifyDatabase(){
+            if($this->columnExists($this->pdo, 'Products', 'color')){
+                return;
+            }
+            $this->pdo->query('ALTER TABLE Products ADD COLUMN color varchar(20) DEFAULT NULL');
         }
 
         function initDatabase(){
