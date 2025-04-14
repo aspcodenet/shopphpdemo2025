@@ -78,8 +78,8 @@ require_once("vendor/autoload.php");
                 price INT,
                 stockLevel INT,
                 categoryName VARCHAR(50),
-                popularityFactor INT DEFAULT 0,
-            )');
+                popularityFactor INT DEFAULT(0)            
+                )');
         }
 
         function getProduct($id){
@@ -138,6 +138,10 @@ require_once("vendor/autoload.php");
 
             // SELECT * FROM Products ORDER BY  id asc
             $query = $this->pdo->query("SELECT * FROM Products ORDER BY $sortCol $sortOrder"); // Products är TABELL 
+            return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
+        }
+        function getPopularProducts(){
+            $query = $this->pdo->query("SELECT * FROM Products ORDER BY popularityFactor DESC LIMIT 10"); // Products är TABELL 
             return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
         }
 
