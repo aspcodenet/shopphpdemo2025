@@ -53,6 +53,10 @@ if($catName == ""){
                         <li class="nav-item"><a class="nav-link" href="#!">Login</a></li>
                         <li class="nav-item"><a class="nav-link" href="#!">Create account</a></li>
                     </ul>
+                    <form action="/search" method="GET">
+                        <input type="text" name="q" placeholder="Search" class="form-control">
+                     </form>   
+
                     <form class="d-flex">
                         <button class="btn btn-outline-dark" type="submit">
                             <i class="bi-cart-fill me-1"></i>

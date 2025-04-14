@@ -126,15 +126,15 @@ require_once("vendor/autoload.php");
         }
 
 
-        function searchProducts($q,$sortCol, $sortOrder){
-            if(!in_array($sortCol,[ "title","price"])){
+        function searchProducts($q,$sortCol, $sortOrder){ // $q = oo
+            if(!in_array($sortCol,[ "title","price"])){ // title123312132312321
                 $sortCol = "title";
             }
             if(!in_array($sortOrder,["asc", "desc"])){
                 $sortOrder = "asc";
             }
 
-            $query = $this->pdo->prepare("SELECT * FROM Products WHERE title LIKE :q or categoryName like :q ORDER BY $sortCol $sortOrder"); // Products är TABELL
+            $query = $this->pdo->prepare("SELECT * FROM Products WHERE title LIKE :q OR categoryName LIKE :q ORDER BY $sortCol $sortOrder"); // Products är TABELL
             $query->execute(['q' => "%$q%"]);
             return $query->fetchAll(PDO::FETCH_CLASS, 'Product');
         }

@@ -61,7 +61,6 @@ $sortOrder = $_GET['sortOrder'] ?? "";
 
                      <form action="/search" method="GET">
                         <input type="text" name="q" value="<?php echo $q; ?>" placeholder="Search" class="form-control">
-                        <button class="btn btn-outline-dark" type="submit">Search</button>
                      </form>   
 
 
