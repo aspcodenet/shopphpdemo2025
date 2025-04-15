@@ -9,6 +9,8 @@ class Product{
 
     public $popularityFactor;
 
+    public $color;
+
     // ANVÄND INTE CONSTRUCTOR MED PARAMETRAR FÖR PDO KAN INTE ANROPA DEN
 };
 ?>
