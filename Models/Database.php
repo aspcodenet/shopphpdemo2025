@@ -126,17 +126,32 @@ require_once("vendor/autoload.php");
         }
 
 
-        function searchProducts($q,$sortCol, $sortOrder){ // $q = oo
+        function searchProducts($q,$sortCol, $sortOrder,$pageNo=1,$pageSize=3){ // $q = oo
             if(!in_array($sortCol,[ "title","price"])){ // title123312132312321
                 $sortCol = "title";
             }
             if(!in_array($sortOrder,["asc", "desc"])){
                 $sortOrder = "asc";
             }
+            $sqlProdukterna = "SELECT * FROM Products WHERE title LIKE :q OR categoryName LIKE :q ";
+            $sqlCount = str_replace("SELECT * FROM ", "SELECT CEIL (COUNT(*)/$pageSize) FROM ", $sqlProdukterna);
 
-            $query = $this->pdo->prepare("SELECT * FROM Products WHERE title LIKE :q OR categoryName LIKE :q ORDER BY $sortCol $sortOrder"); // Products är TABELL
+            $sqlProdukterna .= " ORDER BY $sortCol $sortOrder ";    
+            $offset = ($pageNo-1)*$pageSize;
+            $sqlProdukterna .= " LIMIT $offset, $pageSize"; // LIMIT 0, 3
+      
+
+            $query = $this->pdo->prepare($sqlProdukterna); // Products är TABELL
             $query->execute(['q' => "%$q%"]);
-            return $query->fetchAll(PDO::FETCH_CLASS, 'Product');
+
+            $data = $query->fetchAll(PDO::FETCH_CLASS, 'Product');
+
+            $query = $this->pdo->prepare($sqlCount); // Products är TABELL
+            $query->execute(['q' => "%$q%"]);
+            $num_pages = $query->fetchColumn();   
+            
+            return ["data"=>$data, "num_pages"=>$num_pages]; 
+      
         }
 
 

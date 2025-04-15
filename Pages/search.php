@@ -10,7 +10,9 @@ $dbContext = new Database();
 $q = $_GET['q'] ?? "";
 $sortCol = $_GET['sortCol'] ?? "";
 $sortOrder = $_GET['sortOrder'] ?? "";
+$pageNo= $_GET['pageNo'] ?? "1";
 
+$result = $dbContext->searchProducts($q,$sortCol, $sortOrder,$pageNo);
 ?>
 
 <!DOCTYPE html>
@@ -90,17 +92,18 @@ $sortOrder = $_GET['sortOrder'] ?? "";
         <!-- Section-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
+                <div class="text-center mb-4">
                         <a href="?sortCol=title&sortOrder=asc&q=<?php echo $q;?>" class="btn btn-secondary">Title asc</a>
                         <a href="?sortCol=title&sortOrder=desc&q=<?php echo $q;?>" class="btn btn-secondary">Title desc</a>
                         <a href="?sortCol=price&sortOrder=asc&q=<?php echo $q;?>" class="btn btn-secondary">Price asc</a>
                         <a href="?sortCol=price&sortOrder=desc&q=<?php echo $q;?>" class="btn btn-secondary">Price desc</a>
-
+                </div>        
 
 
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 
                 <?php 
-                    foreach($dbContext->searchProducts($q,$sortCol, $sortOrder) as $prod){
+                    foreach($result["data"] as $prod){
                 ?>                    
                     <div class="col mb-5">
                             <div class="card h-100">
@@ -127,6 +130,26 @@ $sortOrder = $_GET['sortOrder'] ?? "";
                     <?php } ?>  
                           
                 </div>
+
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                <?php 
+        for($i = 1; $i <= $result["num_pages"] ;$i++){
+            if($i == $pageNo){
+                echo "<li class='page-item active'><a class='page-link' href='#'>$i</a></li>";
+                continue;
+            }
+            $link="?sortCol=$sortCol&sortOrder=$sortOrder&pageNo=$i&q=$q";
+            echo "<li class='page-item'><a class='page-link' href='$link'>$i</a></li>";
+        }
+         
+
+    ?>
+                        </ul>
+                    </nav>
+
+
             </div> 
         </section>
 
