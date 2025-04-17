@@ -126,7 +126,7 @@ require_once("vendor/autoload.php");
         }
 
 
-        function searchProducts($q,$sortCol, $sortOrder){ // $q = oo
+        function searchProducts($q,$sortCol, $sortOrder,$pageNo,$pageSize=10){ // $q = oo
             if(!in_array($sortCol,[ "title","price"])){ // title123312132312321
                 $sortCol = "title";
             }
@@ -134,10 +134,46 @@ require_once("vendor/autoload.php");
                 $sortOrder = "asc";
             }
 
-            $query = $this->pdo->prepare("SELECT * FROM Products WHERE title LIKE :q OR categoryName LIKE :q ORDER BY $sortCol $sortOrder"); // Products är TABELL
+            $sqlProducts = "SELECT * FROM Products WHERE title LIKE :q OR categoryName LIKE :q ORDER BY $sortCol $sortOrder";
+            $sqlCount = str_replace("SELECT * FROM ", "SELECT CEIL (COUNT(*)/$pageSize) FROM ", $sqlProducts);
+
+            // LIMIT 
+            $offset = ($pageNo-1)*$pageSize; // START POSITIONEN
+
+            // $sqlProducts = $sqlProducts +  " LIMIT $offset, $pageSize"; // LIMIT 0, 10
+            // $sqlProducts +=  " LIMIT $offset, $pageSize"; // LIMIT 0, 10
+            //$sqlProducts =   $sqlProducts . " LIMIT $offset, $pageSize"; // LIMIT 0, 10
+            $sqlProducts .= " LIMIT $offset, $pageSize"; // LIMIT 0, 10
+
+            $query = $this->pdo->prepare($sqlProducts); // Products är TABELL
             $query->execute(['q' => "%$q%"]);
-            return $query->fetchAll(PDO::FETCH_CLASS, 'Product');
+            $data =  $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // $data  innehåller alla produkter som matchar sökningen
+
+
+            $query = $this->pdo->prepare($sqlCount); // Products är TABELL
+            $query->execute(['q' => "%$q%"]);
+            $num_pages = $query->fetchColumn();   // $num_pages  innehåller antalet sidor som finns i databasen
+
+            // arrayen["data"] istf // arrayen[0]
+            return ["data"=>$data, "num_pages"=>$num_pages]; // returnerar en array med två element: $data och $num_pages
         }
+
+        // Vad är en array?
+        // en array är en samling av värden
+        // värdena når vi genom indexnummer 
+        // $players[0] 
+        // $players[1] 
+
+        // Vad är en associativ array? (dictionaries i Python, maps)
+        // en associativ array är en samling av värden
+        // värdena når vi genom NAMN (keys) 
+        // $players['forward'] 
+        // $players['goalie'] 
+
+
+        // $result = $this->searchProducts($q,$sortCol, $sortOrder,$pageNo,$pageSize); // $result är en array med två element: $data och $num_pages
+        // $data = $result[0]; // $data innehåller alla produkter som matchar sökningen    
+        // $num_pages = $result[1]; // $num_pages innehåller antalet sidor som finns i databasen
 
 
         //function getAllProducts($sortCol, $sortOrder){
