@@ -2,25 +2,41 @@
 require_once('Models/Product.php');
 require_once("components/Footer.php");
 require_once('Models/Database.php');
+require_once('Utils/Validator.php');
 
 $id = $_GET['id'];
 $dbContext = new Database();
 // Hämta den produkt med detta ID
 $product = $dbContext->getProduct($id); // TODO felhantering om inget produkt
 
+$v = new Validator($_POST);
+
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-    // Här kommer vi när man har tryckt  på SUBMIT
-    // IMORGON TISDAG SÅ UPDATE PRODUCT SET title = $_POST['title'] WHERE id = $id
     $product->title = $_POST['title'];
     $product->stockLevel = $_POST['stockLevel'];
 
     $product->price = $_POST['price'];
     $product->categoryName = $_POST['categoryName'];
     $product->popularityFactor = $_POST['popularityFactor'];
-    $dbContext->updateProduct($product);
-    header("Location: /admin/products");
-    exit;
+
+
+    $v->field('title')->required()->alpha_num([' '])->min_len(3)->max_len(50);
+    $v->field('stockLevel')->required()->numeric()->min_val(0);
+    $v->field('price')->required()->numeric()->min_val(0);
+    $v->field('categoryName')->required()->alpha_num([' '])->min_len(3)->max_len(50);
+    $v->field('popularityFactor')->required()->numeric()->min_val(0);
+    if($v->is_valid()){
+        // Om vi kommer hit så är allt OK och vi kan spara i databasen
+        // Här kommer vi när man har tryckt  på SUBMIT
+        // IMORGON TISDAG SÅ UPDATE PRODUCT SET title = $_POST['title'] WHERE id = $id
+        $dbContext->updateProduct($product);
+        header("Location: /admin/products");
+        exit;
+    }
+
+    
+
 }else{
     // Det är INTE ett formulär som har postats - utan man har klickat in på länk tex edit.php?id=12
 }
@@ -83,26 +99,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
 
-    <form method="POST" > 
+    <form method="POST"> 
         <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" class="form-control" name="title" value="<?php echo $product->title ?>">
+            <input type="text" class="form-control <?php echo $v->get_error_message('title') != "" ? "is-invalid" : ""  ?>" name="title" value="<?php echo $product->title ?>">
+            <span class="invalid-feedback"><?php echo $v->get_error_message('title');  ?></span>
         </div>
         <div class="form-group">
             <label for="price">Price</label>
-            <input type="text" class="form-control" name="price" value="<?php echo $product->price ?>">
+            <input type="text" class="form-control <?php echo $v->get_error_message('price') != "" ? "is-invalid" : ""  ?>" name="price" value="<?php echo $product->price ?>" >
+            <span class="invalid-feedback"><?php echo $v->get_error_message('price');  ?></span>
         </div>
         <div class="form-group">
-            <label for="stockLevel">Stock</label>
-            <input type="text" class="form-control" name="stockLevel" value="<?php echo $product->stockLevel ?>">
+            <label for="stockLevel">Stock level</label>
+            <input type="text" class="form-control <?php echo $v->get_error_message('stockLevel') != "" ? "is-invalid" : ""  ?>" name="stockLevel" value="<?php echo $product->stockLevel ?>" >
+            <span class="invalid-feedback"><?php echo $v->get_error_message('stockLevel');  ?></span>
         </div>
         <div class="form-group">
-            <label for="categpryName">Category name:</label>
-            <input type="text" class="form-control" name="categoryName" value="<?php echo $product->categoryName ?>">
+            <label for="categoryName">Category</label>
+            <input type="text" class="form-control <?php echo $v->get_error_message('categoryName') != "" ? "is-invalid" : ""  ?>" name="categoryName" value="<?php echo $product->categoryName ?>" >
+            <span class="invalid-feedback"><?php echo $v->get_error_message('categoryName');  ?></span>
         </div>
         <div class="form-group">
             <label for="popularityFactor">Popularity factor</label>
-            <input type="number" class="form-control" name="popularityFactor" value="<?php echo $product->popularityFactor ?>">
+            <input type="number" class="form-control <?php echo $v->get_error_message('popularityFactor') != "" ? "is-invalid" : ""  ?>" name="popularityFactor"  value="<?php echo $product->popularityFactor ?>">
+            <span class="invalid-feedback"><?php echo $v->get_error_message('popularityFactor');  ?></span>
         </div>
 
 
