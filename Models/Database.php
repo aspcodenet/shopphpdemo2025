@@ -91,7 +91,7 @@ require_once("vendor/autoload.php");
                 price INT,
                 stockLevel INT,
                 categoryName VARCHAR(50),
-                popularityFactor INT DEFAULT(0)            
+                popularityFactor INT DEFAULT 0            
                 )');
         }
 
@@ -184,7 +184,7 @@ require_once("vendor/autoload.php");
             if(!in_array($sortOrder,["asc", "desc"])){
                 $sortOrder = "asc";
             }
-
+ 
             // SELECT * FROM Products ORDER BY  id asc
             $query = $this->pdo->query("SELECT * FROM Products ORDER BY $sortCol $sortOrder"); // Products är TABELL 
             return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
