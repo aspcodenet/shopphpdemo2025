@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             <span class="invalid-feedback"><?php echo $v->get_error_message('stockLevel');  ?></span>                        
             </div>
         <div class="form-group">
-            <label for="categpryName">Category name:</label>
+            <label for="categoryName">Category name:</label>
             <input type="text" class="form-control <?php echo $v->get_error_message('categoryName') != "" ? "is-invalid" : ""  ?>"" name="categoryName" value="<?php echo $product->categoryName ?>">
             <span class="invalid-feedback><?php echo $v->get_error_message('categoryName');  ?></span>                        
             </div>
