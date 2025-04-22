@@ -258,7 +258,7 @@ class Validator{
      * @return this
      */
     function equals($value){
-        if($this->next && $this->exists() && !$this->data[$this->current_field] == $value){
+        if($this->next && $this->exists() && $this->data[$this->current_field] != $value){
             $this->add_error_message('equals');
             $this->next = false;
         }
