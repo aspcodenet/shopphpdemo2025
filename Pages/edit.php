@@ -24,7 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $v->field('title')->required()->alpha_num([' '])->min_len(3)->max_len(50);
     $v->field('stockLevel')->required()->numeric()->min_val(0);
     $v->field('price')->required()->numeric()->min_val(0);
-    $v->field('categoryName')->required()->alpha_num([' '])->min_len(3)->max_len(50);
+    //$v->field('price')->equals($_POST['stockLevel'])->required()->numeric()->min_val(0)->max_val(10000);
+    //$v->field('categoryName')->required()->alpha_num([' '])->min_len(3)->max_len(50);
+    $v->field('categoryName')->equals($_POST['title']);
     $v->field('popularityFactor')->required()->numeric()->min_val(0);
 
     // om ok så spara i databas
@@ -115,7 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         <div class="form-group">
             <label for="categoryName">Category name:</label>
             <input type="text" class="form-control <?php echo $v->get_error_message('categoryName') != "" ? "is-invalid" : ""  ?>"" name="categoryName" value="<?php echo $product->categoryName ?>">
-            <span class="invalid-feedback><?php echo $v->get_error_message('categoryName');  ?></span>                        
+            <span class="invalid-feedback"><?php echo $v->get_error_message('categoryName');  ?>
+            </span>                        
             </div>
         <div class="form-group">
             <label for="popularityFactor">Popularity factor</label>
