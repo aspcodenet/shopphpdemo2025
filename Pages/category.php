@@ -7,11 +7,18 @@ require_once("Models/Database.php");
 
 $dbContext = new Database();
 
-$catName = $_GET['catname'] ?? "";
+$catId = $_GET['id'] ?? "";
 
-$header = $catName;
-if($catName == ""){
-    $header = "All Products";
+
+$header = "All products";
+$description = "All products in the shop";
+if($catId != ""){
+    $cat = $dbContext->getCategory($catId);
+    if($cat != null){
+        $header = $cat->name;
+        $description = $cat->description;
+    }
+
 }
 ?>
 
@@ -44,10 +51,10 @@ if($catName == ""){
                                 <li><a class="dropdown-item" href="/category">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                     <?php
-                                    foreach($dbContext->getAllCategories() as $cat){
-                                        echo "<li><a class='dropdown-item' href='/category?catname=$cat'>$cat</a></li>";
-                                    } 
-                                    ?> 
+                                         foreach($dbContext->getAllCategories() as $category){
+                                            echo "<li><a class='dropdown-item' href='/category?id=$category->id'>$category->name</a></li>";
+                                        } 
+                                   ?> 
                             </ul> 
                         </li>
                         <li class="nav-item"><a class="nav-link" href="#!">Login</a></li>
@@ -73,6 +80,9 @@ if($catName == ""){
                 <div class="text-center text-white">
                     <h1 class="display-4 fw-bolder"><?php echo $header ;?></h1>
                 </div>
+                <div class="text-center text-white">
+                    <p class="lead fw-normal text-white-50 mb-0"><?php echo $description ;?></p>
+                </div>
             </div>
         </header>
         <!-- Section-->
@@ -80,7 +90,7 @@ if($catName == ""){
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 <?php 
-                foreach($dbContext->getCategoryProducts($catName) as $prod){
+                foreach($dbContext->getCategoryProducts($catId) as $prod){
                 ?>                    
                     <div class="col mb-5">
                             <div class="card h-100">

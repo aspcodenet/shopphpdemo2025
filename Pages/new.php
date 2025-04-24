@@ -13,9 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $title = $_POST['title'];
     $stockLevel = $_POST['stockLevel'];
     $price = $_POST['price'];
-    $categoryName = $_POST['categoryName'];
+    $categoryId = $_POST['categoryId'];
     $popularityFactor = $_POST['popularityFactor'];
-    $dbContext->insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor);
+    $dbContext->insertProduct($title, $stockLevel, $price, "",$popularityFactor,$categoryId);
     header("Location: /admin/products");
     exit;
 }else{
@@ -55,10 +55,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                                 <li><a class="dropdown-item" href="#!">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                     <?php
-                                    foreach($dbContext->getAllCategories() as $cat){
-                                        echo "<li><a class='dropdown-item' href='#!'>$cat</a></li>";
-                                    } 
-                                    ?> 
+                                    // foreach($dbContext->getAllCategories() as $cat){
+                                    //     echo "<li><a class='dropdown-item' href='#!'>$cat</a></li>";
+                                    // } 
+                                    // ?> 
                                     <li><a class="dropdown-item" href="#!">En cat</a></li>
                             </ul> 
                         </li>
@@ -94,8 +94,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             <input type="text" class="form-control" name="stockLevel" value="">
         </div>
         <div class="form-group">
-            <label for="categpryName">Category name:</label>
-            <input type="text" class="form-control" name="categoryName" value="">
+            <label for="categoryId">Category:</label>
+            <select name="categoryId" class="form-control">
+                <option value="-1">Välj kategori</option>
+                <?php
+                foreach($dbContext->getAllCategories() as $category){
+                    echo "<option value='$category->id'>$category->name</option>";
+                } 
+                ?>
+            </select>
         </div>
         <div class="form-group">
             <label for="popularityFactor">Popularity factor</label>

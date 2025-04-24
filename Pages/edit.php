@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $product->stockLevel = $_POST['stockLevel'];
 
     $product->price = $_POST['price'];
-    $product->categoryName = $_POST['categoryName'];
+    $product->categoryId = $_POST['categoryId'];
     $product->popularityFactor = $_POST['popularityFactor'];
 
     // validera
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $v->field('stockLevel')->required()->numeric()->min_val(0);
     $v->field('price')->required()->numeric()->min_val(0);
     //$v->field('price')->equals($_POST['stockLevel'])->required()->numeric()->min_val(0)->max_val(10000);
-    $v->field('categoryName')->required()->alpha_num([' '])->min_len(3)->max_len(50);
+    $v->field('categoryId')->min_val(1);
     //$v->field('categoryName')->equals($_POST['title']);
     $v->field('popularityFactor')->required()->numeric()->min_val(0);
 
@@ -91,10 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                                 <li><a class="dropdown-item" href="#!">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                     <?php
-                                    foreach($dbContext->getAllCategories() as $cat){
-                                        echo "<li><a class='dropdown-item' href='#!'>$cat</a></li>";
-                                    } 
-                                    ?> 
+                                    // foreach($dbContext->getAllCategories() as $cat){
+                                    //     echo "<li><a class='dropdown-item' href='#!'>$cat</a></li>";
+                                    // } 
+                                    // ?> 
                                     <li><a class="dropdown-item" href="#!">En cat</a></li>
                             </ul> 
                         </li>
@@ -133,11 +133,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             <span class="invalid-feedback"><?php echo $v->get_error_message('stockLevel');  ?></span>                        
             </div>
         <div class="form-group">
-            <label for="categoryName">Category name:</label>
-            <input type="text" class="form-control <?php echo $v->get_error_message('categoryName') != "" ? "is-invalid" : ""  ?>"" name="categoryName" value="<?php echo $product->categoryName ?>">
-            <span class="invalid-feedback"><?php echo $v->get_error_message('categoryName');  ?>
-            </span>                        
-            </div>
+            <label for="categoryId">Category:</label>
+            <select name="categoryId" class="form-control">
+                <option value="-1">Välj kategori</option>
+                <?php
+                foreach($dbContext->getAllCategories() as $category){
+                    $selected = "";
+                    if($category->id == $product->categoryId){
+                        $selected = "selected";
+                    }
+                    echo "<option $selected value='$category->id'>$category->name</option>";
+                } 
+                ?>
+            </select>
+            <span class=""><?php echo $v->get_error_message('categoryId');  ?></span>                        
+        </div>
+
         <div class="form-group">
             <label for="popularityFactor">Popularity factor</label>
             <input type="number" class="form-control <?php echo $v->get_error_message('popularityFactor') != "" ? "is-invalid" : ""  ?>"" name="popularityFactor" value="<?php echo $product->popularityFactor ?>">

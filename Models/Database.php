@@ -2,6 +2,7 @@
 
 require_once('Models/UserDatabase.php');
 require_once("vendor/autoload.php");
+require_once('Models/Category.php');
 
 // Hur kan man strukturera klasser
 // Hir kan man struktirera filer? Folders + subfolders
@@ -51,6 +52,12 @@ require_once("vendor/autoload.php");
         }
 
 
+        function getCategory($id){
+            $query = $this->pdo->prepare("SELECT * FROM Category WHERE id = :id");
+            $query->execute(['id' => $id]);
+            $query->setFetchMode(PDO::FETCH_CLASS, 'Category');
+            return $query->fetch();
+        }
 
         function addCategoryIfNotExists($categoryName, $description){
             $query = $this->pdo->prepare("SELECT * FROM Category WHERE name = :name");
@@ -90,7 +97,7 @@ require_once("vendor/autoload.php");
                 //$categoryName = $faker->category();
                 $categoryId = $faker->numberBetween(1, 6);
                 $popularityFactor = $faker->numberBetween(1, 100);
-                $this->addProductIfNotExists($title, $price, $stockLevel, $categoryName,$popularityFactor,$categoryId);
+                $this->addProductIfNotExists($title, $price, $stockLevel, "",$popularityFactor,$categoryId);
             }
         }
 
@@ -133,10 +140,10 @@ require_once("vendor/autoload.php");
 
         function updateProduct($product){
             $s = "UPDATE Products SET title = :title," .
-                " price = :price, stockLevel = :stockLevel, categoryName = :categoryName, popularityFactor=:popularityFactor WHERE id = :id";
+                " price = :price, stockLevel = :stockLevel, categoryId = :categoryId, popularityFactor=:popularityFactor WHERE id = :id";
             $query = $this->pdo->prepare($s);
             $query->execute(['title' => $product->title, 'price' => $product->price,
-                'stockLevel' => $product->stockLevel, 'categoryName' => $product->categoryName, 
+                'stockLevel' => $product->stockLevel, 'categoryId' => $product->categoryId, 
                 'id' => $product->id,
                 'popularityFactor' => $product->popularityFactor]);
         }
@@ -224,19 +231,18 @@ require_once("vendor/autoload.php");
             return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
         }
 
-        function getCategoryProducts($catName){
-            if($catName == ""){
+        function getCategoryProducts($catId){
+            if($catId == ""){
                 $query = $this->pdo->query("SELECT * FROM Products"); // Products är TABELL 
                 return $query->fetchAll(PDO::FETCH_CLASS, 'Product'); // Product är PHP Klass
             }
-            $query = $this->pdo->prepare("SELECT * FROM Products WHERE categoryName = :categoryName");
-            $query->execute(['categoryName' => $catName]);
+            $query = $this->pdo->prepare("SELECT * FROM Products WHERE categoryId = :categoryId");
+            $query->execute(['categoryId' => $catId]);
             return $query->fetchAll(PDO::FETCH_CLASS, 'Product');
         }
         function getAllCategories(){
-                // SELECT DISTINCT categoryName FROM Products
-            $data = $this->pdo->query('SELECT DISTINCT categoryName FROM Products')->fetchAll(PDO::FETCH_COLUMN);
-            return $data;
+            $query = $this->pdo->query("SELECT * FROM Category"); // Products är TABELL 
+            return $query->fetchAll(PDO::FETCH_CLASS, 'Category'); // Product är PHP Klass
         }
 
     }

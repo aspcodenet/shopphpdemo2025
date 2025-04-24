@@ -51,8 +51,8 @@ $dbContext = new Database();
                                 <li><a class="dropdown-item" href="/category">All Products</a></li>
                                 <li><hr class="dropdown-divider" /></li>
                                     <?php
-                                    foreach($dbContext->getAllCategories() as $cat){
-                                        echo "<li><a class='dropdown-item' href='/category?catname=$cat'>$cat</a></li>";
+                                    foreach($dbContext->getAllCategories() as $category){
+                                        echo "<li><a class='dropdown-item' href='/category?id=$category->id'>$category->name</a></li>";
                                     } 
                                     ?> 
                             </ul> 
