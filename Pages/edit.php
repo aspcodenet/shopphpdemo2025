@@ -25,13 +25,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     $v->field('stockLevel')->required()->numeric()->min_val(0);
     $v->field('price')->required()->numeric()->min_val(0);
     //$v->field('price')->equals($_POST['stockLevel'])->required()->numeric()->min_val(0)->max_val(10000);
-    //$v->field('categoryName')->required()->alpha_num([' '])->min_len(3)->max_len(50);
-    $v->field('categoryName')->equals($_POST['title']);
+    $v->field('categoryName')->required()->alpha_num([' '])->min_len(3)->max_len(50);
+    //$v->field('categoryName')->equals($_POST['title']);
     $v->field('popularityFactor')->required()->numeric()->min_val(0);
 
     // om ok så spara i databas
     if($v->is_valid()){
         // OK - spara i databas
+        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = 'smtp.ethereal.email';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'syble.walker@ethereal.email';
+        $mail->Password = '952Az5YParb6y3qyjG';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        $mail->From = "stefans@superdupershop.com"; 
+        $mail->FromName = "Stefans SuperShop"; //To address and name 
+        $mail->addAddress("stefan.holmberg@systementor.se"); //Address to which recipient will reply 
+        $mail->addReplyTo("noreply@ysuperdupershop.com", "No-Reply"); //CC and BCC 
+        $mail->isHTML(true); 
+        $mail->Subject = "Bara liten test"; 
+        $mail->Body = "<h2>Hej</h2>, HoppAa in på vår kampanj <a href='http://localhost:8000/category?catname=Industrial'>LÄNK TILL </a>";
+        $mail->send();
+
          $dbContext->updateProduct($product);
         header("Location: /admin/products");
         exit;

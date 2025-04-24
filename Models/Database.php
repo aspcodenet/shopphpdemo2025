@@ -42,16 +42,38 @@ require_once("vendor/autoload.php");
             $this->usersDatabase->seedUsers();
         }
 
-        function addProductIfNotExists($title, $price, $stockLevel, $categoryName,$popularityFactor){
+        function addProductIfNotExists($title, $price, $stockLevel, $categoryName,$popularityFactor,$categoryId){
             $query = $this->pdo->prepare("SELECT * FROM Products WHERE title = :title");
             $query->execute(['title' => $title]);
             if($query->rowCount() == 0){
-                $this->insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor);
+                $this->insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor,$categoryId);
             }
         }
 
 
+
+        function addCategoryIfNotExists($categoryName, $description){
+            $query = $this->pdo->prepare("SELECT * FROM Category WHERE name = :name");
+            $query->execute(['name' => $categoryName]);
+            if($query->rowCount() == 0){
+                $this->insertCategory($categoryName, $description);
+            }
+        }
+        function insertCategory($categoryName, $description){
+            $sql = "INSERT INTO Category (name, description) VALUES (:name, :description)";
+            $query = $this->pdo->prepare($sql);
+            $query->execute(['name' => $categoryName, 'description' => $description]);
+        }
         function initData(){
+
+            //Skjapa massa categorier
+            $categories = ["Industrial", "Electronics", "Toys", "Books", "Clothing", "Food"];
+            for($i = 0; $i < count($categories); $i++){
+                $categoryName = $categories[$i];
+                $description = "Description for category " . $categoryName;
+                $this->addCategoryIfNotExists($categoryName, $description);
+            }
+
             $sql = "SELECT COUNT(*) FROM Products";
             $res = $this->pdo->query($sql);
             $count = $res->fetchColumn();
@@ -65,9 +87,10 @@ require_once("vendor/autoload.php");
                 $title = $faker->productName();
                 $price = $faker->numberBetween(1, 100);
                 $stockLevel = $faker->numberBetween(1, 100);
-                $categoryName = $faker->category();
+                //$categoryName = $faker->category();
+                $categoryId = $faker->numberBetween(1, 6);
                 $popularityFactor = $faker->numberBetween(1, 100);
-                $this->addProductIfNotExists($title, $price, $stockLevel, $categoryName,$popularityFactor);
+                $this->addProductIfNotExists($title, $price, $stockLevel, $categoryName,$popularityFactor,$categoryId);
             }
         }
 
@@ -91,7 +114,13 @@ require_once("vendor/autoload.php");
                 price INT,
                 stockLevel INT,
                 categoryName VARCHAR(50),
-                popularityFactor INT DEFAULT 0            
+                popularityFactor INT DEFAULT 0,
+                categoryId INT             
+                )');
+            $this->pdo->query('CREATE TABLE IF NOT EXISTS Category (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(50),
+                description VARCHAR(255)           
                 )');
         }
 
@@ -117,11 +146,12 @@ require_once("vendor/autoload.php");
             $query->execute(['id' => $id]);
         }
 
-        function insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor) {
-            $sql = "INSERT INTO Products (title, price, stockLevel, categoryName, popularityFactor) VALUES (:title, :price, :stockLevel, :categoryName, :popularityFactor)";
+        function insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor,$categoryId) {
+            $sql = "INSERT INTO Products (title, price, stockLevel, categoryName, popularityFactor,categoryId) VALUES (:title, :price, :stockLevel, :categoryName, :popularityFactor,:categoryId)";
             $query = $this->pdo->prepare($sql);
             $query->execute(['title' => $title, 'price' => $price,
                 'stockLevel' => $stockLevel, 'categoryName' => $categoryName,
+                "categoryId" => $categoryId,
                 'popularityFactor' => $popularityFactor]);
         }
 

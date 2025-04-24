@@ -11,6 +11,8 @@ class Product{
 
     public $color;
 
+    public $categoryId; 
+
     // ANVÄND INTE CONSTRUCTOR MED PARAMETRAR FÖR PDO KAN INTE ANROPA DEN
 };
 ?>
