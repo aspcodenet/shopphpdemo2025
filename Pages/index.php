@@ -8,8 +8,22 @@
 require_once("Models/Product.php");
 require_once("components/Footer.php");
 require_once("Models/Database.php");
+require_once("Models/Cart.php");
 
 $dbContext = new Database();
+
+$userId = null;
+$session_id = null;
+
+if($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()){
+    $userId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
+}
+    //$cart = $dbContext->getCartByUser($userId);
+$session_id = session_id();
+
+$cart = new Cart($dbContext, $session_id, $userId);
+
+
 
 
 // POPULÄRA PRODUKTER - product 1 to many reviews text+betyg
@@ -75,13 +89,12 @@ $dbContext = new Database();
 
                     <?php if($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()){ ?>
                         Current user: <?php echo $dbContext->getUsersDatabase()->getAuth()->getUsername() ?>
-                        Current user: <?php echo $dbContext->getUsersDatabase()->getAuth()->getUsername() ?>
                     <?php } ?>
                     <form class="d-flex">
                         <button class="btn btn-outline-dark" type="submit">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
+                            <span class="badge bg-dark text-white ms-1 rounded-pill"><?php echo count($cart->getItems()) ?></span>
                         </button>
                     </form>
                 </div>
@@ -121,7 +134,7 @@ $dbContext = new Database();
                                 </div>
                                 <!-- Product actions-->
                                 <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="/addToCart?productId=<?php echo $prod->id ?>&fromPage=<?php echo (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" ?>">Add to cart</a></div>
                                 </div>
                             </div>
                         </div>    

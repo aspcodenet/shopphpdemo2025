@@ -56,6 +56,12 @@ $router->addRoute('/search', function () {
     require_once( __DIR__ .'/Pages/search.php');
 });
 
+
+$router->addRoute('/addToCart', function () {
+    require_once( __DIR__ .'/Pages/addToCart.php');
+});
+
+
 $router->dispatch();
 ?>
 

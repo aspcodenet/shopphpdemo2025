@@ -3,6 +3,7 @@
 require_once('Models/UserDatabase.php');
 require_once("vendor/autoload.php");
 require_once('Models/Category.php');
+require_once('Models/CartItem.php');
 
 // Hur kan man strukturera klasser
 // Hir kan man struktirera filer? Folders + subfolders
@@ -129,7 +130,50 @@ require_once('Models/Category.php');
                 name VARCHAR(50),
                 description VARCHAR(255)           
                 )');
+            $this->pdo->query('CREATE TABLE IF NOT EXISTS CartItem (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                productId INT,
+                quantity INT,
+                addedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                sessionId VARCHAR(50),
+                userId INT NULL,
+                FOREIGN KEY (productId) REFERENCES Products(id) ON DELETE CASCADE
+                )');
         }
+
+
+        function getCartItems($userId, $sessionId){
+            if($userId != null ){
+                $query = $this->pdo->prepare("UPDATE CartItem SET userId=:userId WHERE userId IS NULL AND  sessionId = :sessionId");
+                $query->execute(['sessionId' => $sessionId, 'userId' => $userId]);
+            }
+
+            $query = $this->pdo->prepare("SELECT CartItem.Id, CartItem.productId, CartItem.quantity, Products.title as productName, Products.price as productPrice, Products.price * CartItem.quantity as rowPrice     FROM CartItem JOIN Products ON Products.id=CartItem.productId  WHERE userId=:userId or sessionId = :sessionId");
+            $query->execute(['sessionId' => $sessionId, 'userId' => $userId]);
+
+
+            return $query->fetchAll(PDO::FETCH_CLASS, 'CartItem');
+        }
+
+        function updateCartItem($userId, $sessionId,$productId, $quantity){
+            if($quantity <= 0){
+                $query = $this->pdo->prepare("DELETE FROM CartItem WHERE (userId=:userId or sessionId=:sessionId) AND productId = :productId");
+                $query->execute([ 'userId' => $userId, 'sessionId' => $sessionId, 'productId' => $productId]);
+                return;
+            }
+            $query = $this->pdo->prepare("SELECT * FROM CartItem  WHERE (userId=:userId or sessionId=:sessionId) AND productId = :productId");
+            $query->execute([ 'userId' => $userId, 'sessionId' => $sessionId, 'productId' => $productId]);
+            if($query->rowCount() == 0){
+                $query = $this->pdo->prepare("INSERT INTO CartItem (productId, quantity, sessionId, userId) VALUES (:productId, :quantity, :sessionId, :userId)");
+                $query->execute([ 'userId' => $userId, 'sessionId' => $sessionId, 'productId' => $productId, 'quantity' => $quantity]);
+            }
+            else{
+                $query = $this->pdo->prepare("UPDATE CartItem SET quantity = :quantity WHERE (userId=:userId or sessionId=:sessionId) AND productId = :productId");
+                $query->execute([ 'userId' => $userId, 'sessionId' => $sessionId, 'productId' => $productId, 'quantity' => $quantity]);
+            }
+        }
+
+        
 
         function getProduct($id){
             $query = $this->pdo->prepare("SELECT * FROM Products WHERE id = :id");
