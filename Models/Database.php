@@ -155,6 +155,11 @@ require_once('Models/CartItem.php');
             return $query->fetchAll(PDO::FETCH_CLASS, 'CartItem');
         }
 
+        function convertSessionToUser($session_id, $userId, $newSessionId){
+            $query = $this->pdo->prepare("UPDATE CartItem SET userId=:userId, sessionId=:newSessionId WHERE sessionId = :sessionId");
+            $query->execute(['sessionId' => $session_id, 'userId' => $userId, 'newSessionId' => $newSessionId]);
+        }
+
         function updateCartItem($userId, $sessionId,$productId, $quantity){
             if($quantity <= 0){
                 $query = $this->pdo->prepare("DELETE FROM CartItem WHERE (userId=:userId or sessionId=:sessionId) AND productId = :productId");

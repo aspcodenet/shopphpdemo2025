@@ -2,6 +2,7 @@
 require_once('Models/Product.php');
 require_once("components/Footer.php");
 require_once('Models/Database.php');
+require_once('Models/Cart.php');
 
 $dbContext = new Database();
 
@@ -15,7 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     try{  // om det är felaktigt användarnamn eller lösenord så kastas ett undantag
         // och vi hamnar i catch
+        $cart = new Cart($dbContext, session_id(), null);
         $dbContext->getUsersDatabase()->getAuth()->login($username, $password);
+        $cart->convertSessionToUser($dbContext->getUsersDatabase()->getAuth()->getUserId(), session_id());
         header('Location: /');
         exit;
     }

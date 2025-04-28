@@ -14,11 +14,11 @@ $session_id = null;
 if($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()){
     $userId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
 }
-    //$cart = $dbContext->getCartByUser($userId);
 $session_id = session_id();
 
 $cart = new Cart($dbContext, $session_id, $userId);
 $cart->addItem($productId, 1);
 
+die();
 header("Location: $fromPage");
 ?>
