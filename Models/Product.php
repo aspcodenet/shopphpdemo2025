@@ -13,6 +13,7 @@ class Product{
 
     public $categoryId; 
 
+    public $description;
     // ANVÄND INTE CONSTRUCTOR MED PARAMETRAR FÖR PDO KAN INTE ANROPA DEN
 };
 ?>

@@ -56,10 +56,28 @@ $router->addRoute('/search', function () {
     require_once( __DIR__ .'/Pages/search.php');
 });
 
+$router->addRoute('/api/addToCart', function () {
+    require_once( __DIR__ .'/ApiCode/cart.php');
+});
+
+$router->addRoute('/viewCart', function () {
+    require_once( __DIR__ .'/Pages/viewCart.php');
+});
+
+
+
 
 $router->addRoute('/addToCart', function () {
     require_once( __DIR__ .'/Pages/addToCart.php');
 });
+
+$router->addRoute('/removeFromCart', function () { // Betyder ta bort EN 
+    require_once( __DIR__ .'/Pages/removeFromCart.php');
+});
+
+
+
+
 
 
 $router->dispatch();

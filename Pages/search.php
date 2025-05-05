@@ -4,6 +4,7 @@
 require_once("Models/Product.php");
 require_once("components/Footer.php");
 require_once("Models/Database.php");
+require_once("components/SingleProduct.php");
 
 $dbContext = new Database();
 
@@ -49,7 +50,7 @@ $result = $dbContext->searchProducts($q,$sortCol, $sortOrder, $pageNo, $pageSize
                                 <li><hr class="dropdown-divider" /></li>
                                     <?php
                                     foreach($dbContext->getAllCategories() as $cat){
-                                        echo "<li><a class='dropdown-item' href='/category?catname=$cat'>$cat</a></li>";
+                                        echo "<li><a class='dropdown-item' href='/category?id=$cat->id'>$cat->name</a></li>";
                                     } 
                                     ?> 
                             </ul> 
@@ -109,30 +110,8 @@ $result = $dbContext->searchProducts($q,$sortCol, $sortOrder, $pageNo, $pageSize
                 
                 <?php 
                     foreach($result["data"] as $prod){
-                ?>                    
-                    <div class="col mb-5">
-                            <div class="card h-100">
-                                <?php if($prod->price < 10) {  ?>
-                                    <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                                <?php } ?>        
-                                <!-- Product image-->
-                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                                <!-- Product details-->
-                                <div class="card-body p-4">
-                                    <div class="text-center">
-                                        <!-- Product name-->
-                                        <h5 class="fw-bolder"><?php echo $prod->title; ?></h5>
-                                        <!-- Product price-->
-                                        $<?php echo $prod->price; ?>.00
-                                    </div>
-                                </div>
-                                <!-- Product actions-->
-                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                                </div>
-                            </div>
-                        </div>    
-                    <?php } ?>  
+                        SingleProduct($prod);
+                     } ?>  
                           
                 </div>
 

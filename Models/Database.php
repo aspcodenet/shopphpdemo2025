@@ -4,6 +4,7 @@ require_once('Models/UserDatabase.php');
 require_once("vendor/autoload.php");
 require_once('Models/Category.php');
 require_once('Models/CartItem.php');
+require_once('Models/Product.php');
 
 // Hur kan man strukturera klasser
 // Hir kan man struktirera filer? Folders + subfolders
@@ -109,10 +110,12 @@ require_once('Models/CartItem.php');
         }
 
         function modifyDatabase(){
-            if($this->columnExists($this->pdo, 'Products', 'color')){
-                return;
+            if(!$this->columnExists($this->pdo, 'Products', 'color')){
+                $this->pdo->query('ALTER TABLE Products ADD COLUMN color varchar(20) DEFAULT NULL');
             }
-            $this->pdo->query('ALTER TABLE Products ADD COLUMN color varchar(20) DEFAULT NULL');
+            if(!$this->columnExists($this->pdo, 'Products', 'description')){
+                $this->pdo->query('ALTER TABLE Products ADD COLUMN description TEXT DEFAULT NULL');
+            }
         }
 
         function initDatabase(){
@@ -179,6 +182,12 @@ require_once('Models/CartItem.php');
         }
 
         
+        function getProductByName($name){
+            $query = $this->pdo->prepare("SELECT * FROM Products WHERE title = :name");
+            $query->execute(['name' => $name]);
+            $query->setFetchMode(PDO::FETCH_CLASS, 'Product');
+            return $query->fetch();
+        }
 
         function getProduct($id){
             $query = $this->pdo->prepare("SELECT * FROM Products WHERE id = :id");
@@ -187,12 +196,21 @@ require_once('Models/CartItem.php');
             return $query->fetch();
         }
 
+        function getCategoryById($id){
+            $query = $this->pdo->prepare("SELECT * FROM Category WHERE id = :id");
+            $query->execute(['id' => $id]);
+            $query->setFetchMode(PDO::FETCH_CLASS, 'Category');
+            return $query->fetch();
+        }
+
         function updateProduct($product){
             $s = "UPDATE Products SET title = :title," .
-                " price = :price, stockLevel = :stockLevel, categoryId = :categoryId, popularityFactor=:popularityFactor WHERE id = :id";
+                " price = :price, stockLevel = :stockLevel, categoryId = :categoryId, popularityFactor=:popularityFactor, description=:description, color=:color WHERE id = :id";
             $query = $this->pdo->prepare($s);
             $query->execute(['title' => $product->title, 'price' => $product->price,
                 'stockLevel' => $product->stockLevel, 'categoryId' => $product->categoryId, 
+                'color' => $product->color,
+                'description' => $product->description,
                 'id' => $product->id,
                 'popularityFactor' => $product->popularityFactor]);
         }
@@ -202,7 +220,7 @@ require_once('Models/CartItem.php');
             $query->execute(['id' => $id]);
         }
 
-        function insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor,$categoryId) {
+        function insertProduct($title, $stockLevel, $price, $categoryName,$popularityFactor,$categoryId, $description = ""){ 
             $sql = "INSERT INTO Products (title, price, stockLevel, categoryName, popularityFactor,categoryId) VALUES (:title, :price, :stockLevel, :categoryName, :popularityFactor,:categoryId)";
             $query = $this->pdo->prepare($sql);
             $query->execute(['title' => $title, 'price' => $price,

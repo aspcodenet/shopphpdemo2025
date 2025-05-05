@@ -105,8 +105,8 @@ $cart = new Cart($dbContext, $session_id, $userId);
         <header class="bg-dark py-5">
             <div class="container px-4 px-lg-5 my-5">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Super shoppen</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Handla massa onödigt hos oss!</p>
+                    <h1 class="display-4 fw-bolder">Din cart</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">...</p>
                 </div>
             </div>
         </header>
@@ -114,42 +114,56 @@ $cart = new Cart($dbContext, $session_id, $userId);
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <?php 
-                foreach($dbContext->getPopularProducts() as $prod){
-                    SingleProduct($prod);
-                 } ?>  
-                    <div class="col mb-5">
-                        <div class="card h-100">
-                            <!-- Sale badge-->
-                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
-                            <!-- Product image-->
-                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="...">
-                            <!-- Product details-->
-                            <div class="card-body p-4">
-                                <div class="text-center">
-                                    <!-- Product name-->
-                                    <h5 class="fw-bolder">Special Item</h5>
-                                    <!-- Product reviews-->
-                                    <div class="d-flex justify-content-center small text-warning mb-2">
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                        <div class="bi-star-fill"></div>
-                                    </div>
-                                    <!-- Product price-->
-                                    <span class="text-muted text-decoration-line-through">$20.00</span>
-                                    $18.00
-                                </div>
-                            </div>
-                            <!-- Product actions-->
-                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                            </div>
-                        </div>
-                    </div>         
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Row Price</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($cart->getItems() as $item){
+                            ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $item->productName; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $item->quantity; ?>
+                                    </td>
+
+                                    <td>
+                                        <?php echo $item->productPrice; ?>
+                                    </td>
+
+                                    <td>
+                                        <?php echo $item->rowPrice; ?>
+                                    </td>
+                                    <td>
+                                    <a href="/addToCart?productId=<?php echo $item->productId ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>" class="btn btn-primary">+</a>                                            
+                                    <a href="/removeFromCart?productId=<?php echo $item->productId ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>" class="btn btn-danger">-</a>                                            
+                                    <a href="/removeFromCart?removeCount=<?php echo $item->quantity ?>&productId=<?php echo $item->productId ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>" class="btn btn-danger">DELETE ALL</a>                                            
+                                    </td>
+                                </tr>
+                            <?php
+                            } ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3"></td>
+                                <td><?php echo $cart->getTotalPrice(); ?></td>
+                                <td>
+                                    <a href="/checkout" class="btn btn-success">Checkout</a>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
-            </div> 
+                
+                </div> 
         </section>
 
 

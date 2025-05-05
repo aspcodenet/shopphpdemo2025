@@ -6,7 +6,6 @@ require_once("Models/Cart.php");
 $dbContext = new Database();
 
 $productId = $_GET['productId'] ?? "";
-$fromPage = $_GET['fromPage'] ?? "";
 
 $userId = null;
 $session_id = null;
@@ -19,5 +18,20 @@ $session_id = session_id();
 $cart = new Cart($dbContext, $session_id, $userId);
 $cart->addItem($productId, 1);
 
-header("Location: $fromPage");
+
+
+$jsonData =  json_encode([
+    "status" => "success",
+    "message" => "Product added to cart",
+    "cart" => $cart->getItems(),
+    "cartCount" => $cart->getItemsCount(),
+    "bestTeam" => "Modo Hockey",
+]);
+
+
+echo $jsonData
+
+
+
+
 ?>

@@ -7,6 +7,7 @@ $dbContext = new Database();
 
 $productId = $_GET['productId'] ?? "";
 $fromPage = $_GET['fromPage'] ?? "";
+$removeCount = $_GET['removeCount'] ?? 1;
 
 $userId = null;
 $session_id = null;
@@ -17,7 +18,7 @@ if($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()){
 $session_id = session_id();
 
 $cart = new Cart($dbContext, $session_id, $userId);
-$cart->addItem($productId, 1);
+$cart->removeItem($productId, $removeCount);
 
 header("Location: $fromPage");
 ?>

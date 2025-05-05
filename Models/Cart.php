@@ -55,6 +55,25 @@ class Cart {
         return null;
     }
 
+
+    public function getItemsCount() {
+        $count = 0;
+        foreach ($this->cartItems as $item) {
+            $count += $item->quantity;
+        }
+        return $count;
+        //return count($this->cartItems);
+    }
+
+    public function getTotalPrice() {
+        $total = 0;
+        foreach ($this->cartItems as $item) {
+            $total += $item->rowPrice;
+        }
+        return $total;
+    }
+
+
     public function getItems() {
         return $this->cartItems;
     }
