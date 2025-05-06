@@ -124,7 +124,7 @@ $cart = new Cart($dbContext, $session_id, $userId);
                                 <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="cartItemsTable">
                             <?php foreach($cart->getItems() as $item){
                             ?>
                                 <tr>
@@ -143,6 +143,8 @@ $cart = new Cart($dbContext, $session_id, $userId);
                                         <?php echo $item->rowPrice; ?>
                                     </td>
                                     <td>
+                                        <a href="javascript:addToCart(<?php echo $item->productId;  ?>, true)" class="btn btn-info">PLUS JS</a>
+
                                     <a href="/addToCart?productId=<?php echo $item->productId ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>" class="btn btn-primary">+</a>                                            
                                     <a href="/removeFromCart?productId=<?php echo $item->productId ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>" class="btn btn-danger">-</a>                                            
                                     <a href="/removeFromCart?removeCount=<?php echo $item->quantity ?>&productId=<?php echo $item->productId ?>&fromPage=<?php echo urlencode((empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]") ?>" class="btn btn-danger">DELETE ALL</a>                                            
@@ -154,7 +156,7 @@ $cart = new Cart($dbContext, $session_id, $userId);
                         <tfoot>
                             <tr>
                                 <td colspan="3"></td>
-                                <td><?php echo $cart->getTotalPrice(); ?></td>
+                                <td id="totalPrice"><?php echo $cart->getTotalPrice(); ?></td>
                                 <td>
                                     <a href="/checkout" class="btn btn-success">Checkout</a>
                                 </td>

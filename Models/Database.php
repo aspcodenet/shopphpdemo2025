@@ -151,7 +151,7 @@ require_once('Models/Product.php');
                 $query->execute(['sessionId' => $sessionId, 'userId' => $userId]);
             }
 
-            $query = $this->pdo->prepare("SELECT CartItem.Id, CartItem.productId, CartItem.quantity, Products.title as productName, Products.price as productPrice, Products.price * CartItem.quantity as rowPrice     FROM CartItem JOIN Products ON Products.id=CartItem.productId  WHERE userId=:userId or sessionId = :sessionId");
+            $query = $this->pdo->prepare("SELECT CartItem.Id as id, CartItem.productId, CartItem.quantity, Products.title as productName, Products.price as productPrice, Products.price * CartItem.quantity as rowPrice     FROM CartItem JOIN Products ON Products.id=CartItem.productId  WHERE userId=:userId or sessionId = :sessionId");
             $query->execute(['sessionId' => $sessionId, 'userId' => $userId]);
 
 

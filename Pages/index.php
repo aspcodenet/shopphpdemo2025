@@ -95,7 +95,8 @@ $cart = new Cart($dbContext, $session_id, $userId);
                         <a class="btn btn-outline-dark" href="/viewCart">
                             <i class="bi-cart-fill me-1"></i>
                             Cart
-                            <span id="cartCount" class="badge bg-dark text-white ms-1 rounded-pill"><?php echo $cart->getItemsCount() ?></span>
+                            <span id="cartCount" class="badge bg-dark text-white ms-1 rounded-pill">
+                                <?php echo $cart->getItemsCount() ?></span>
                         </a>
                     </form>
                 </div>

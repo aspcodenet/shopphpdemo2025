@@ -26,6 +26,7 @@ $jsonData =  json_encode([
     "cart" => $cart->getItems(),
     "cartCount" => $cart->getItemsCount(),
     "bestTeam" => "Modo Hockey",
+    "cartTotal" => $cart->getTotalPrice(),
 ]);
 
 
