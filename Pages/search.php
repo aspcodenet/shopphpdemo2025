@@ -5,6 +5,7 @@ require_once("Models/Product.php");
 require_once("components/Footer.php");
 require_once("Models/Database.php");
 require_once("components/SingleProduct.php");
+require_once("Utils/SearchEngine.php");
 
 $dbContext = new Database();
 
@@ -15,7 +16,10 @@ $pageNo = $_GET['pageNo'] ?? "1";
 
 $pageSize = $_GET['pageSize'] ?? "10";
 
-$result = $dbContext->searchProducts($q,$sortCol, $sortOrder, $pageNo, $pageSize); // $result är en array med två element: $data och $num_pages
+$searchEngine = new SearchEngine();
+
+$result = $searchEngine->search($q);//,$sortCol, $sortOrder, $pageNo, $pageSize); // $result är en array med två element: $data och $num_pages
+//$result = $dbContext->searchProducts($q,$sortCol, $sortOrder, $pageNo, $pageSize); // $result är en array med två element: $data och $num_pages
 // $result["data"] = arrayen med produkter
 // $result["num_pages"] = antalet sidor i databasen
 ?>

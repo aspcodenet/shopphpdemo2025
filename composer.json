@@ -4,9 +4,8 @@
         "delight-im/auth": "^8.3",
         "mbezhanov/faker-provider-collection": "^2.0",
         "phpmailer/phpmailer": "^6.9",
-        "guzzlehttp/guzzle": "^7.9",
-        "opensearch-project/opensearch-php": "^2.4",
-        "stripe/stripe-php": "^17.2"
+        "stripe/stripe-php": "^17.2",
+        "guzzlehttp/guzzle": "^7.9"
     },
     "config": {
         "allow-plugins": {

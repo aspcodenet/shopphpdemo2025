@@ -1,0 +1,123 @@
+<?php
+
+
+require_once("vendor/autoload.php"); // LADDA ALLA DEPENDENCIES FROM VENDOR
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+
+require_once("Models/Database.php"); // LADDA ALLA DEPENDENCIES FROM VENDOR
+//  :: en STATIC funktion
+$dotenv = Dotenv\Dotenv::createImmutable("."); // . is  current folder for the PAGE
+$dotenv->load();
+
+
+
+
+class SearchEngine{
+    private $accessKey = 'PDsMUOHw78Og_J-gjGvujQ';
+    private $secretKey='1KKc3cT5LTtRYckYKtPpCfe19H_P_Q';
+    private $url = "https://betasearch.systementor.se";
+    private $index_name = "products-12";
+
+    private  $client;
+
+    function __construct(){
+        $this->client = new Client([
+            'base_uri' => $this->url,
+            'verify' => false,
+            'headers' => [
+                'Authorization' => 'Basic ' . base64_encode($this->accessKey . ':' . $this->secretKey),
+                'Content-Type' => 'application/json'
+            ]
+        ]);
+
+    }
+
+    function getDocumentIdOrUndefined(string $webId): ?string {
+        $query = [
+            'query' => [
+                'term' => [
+                    'webid' => $webId
+                ]
+            ]
+        ];
+
+
+        try {
+            $response = $this->client->post("/api/index/v1/{$this->index_name}/_search", [
+                'json' => $query
+            ]);
+
+            $data = json_decode($response->getBody(), true);
+
+            if (empty($data['hits']['total']['value'])) {
+                return null;
+            }
+
+            return $data['hits']['hits'][0]['_id'];
+        } catch (RequestException $e) {
+            // Hantera eventuella fel här
+            echo $e->getMessage();
+            return null;
+        }
+    }
+
+    function search(string $query){
+        $query = [
+            'query' => [
+                'query_string' => [
+                    'query' => $query . "*"
+                ]
+            ]
+        ];
+
+        try {
+            $response = $this->client->post("/api/index/v1/{$this->index_name}/_search", [
+                'json' => $query
+            ]);
+
+            $data = json_decode($response->getBody(), true);
+            var_dump($data);
+
+            if (empty($data['hits']['total']['value'])) {
+                return null;
+            }
+
+            return  ["data"=>$data];
+        } catch (RequestException $e) {
+            // Hantera eventuella fel här
+            echo $e->getMessage();
+            return null;
+        }  
+    }
+
+
+
+// $res = search("cov*",$accessKey,$secretKey,$url,$index_name);
+// //var_dump(count($res["hits"]["hits"]));
+// for($i =0 ; $i < count($res["hits"]["hits"]); $i++){
+//     $hit = $res["hits"]["hits"][$i];
+// //    var_dump($hit);
+//     echo $hit["_id"] . ","; 
+//     echo $hit["_source"]["webid"] . ","; 
+//     echo $hit["_source"]["title"] . ","; 
+//     echo $hit["_source"]["price"] . "</br>"; 
+// }
+
+
+
+}
+
+
+
+
+
+// $res = getDocumentIdOrUndefined(1,$accessKey,$secretKey,$url,$index_name);
+// if ($res == null){
+//     die("INGET");
+// }else{
+// }
+
+
+
