@@ -40,6 +40,15 @@ $cart = new Cart($dbContext, $session_id, $userId);
 <!DOCTYPE html>
 <html lang="en">
     <head>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5NXP0GE5CV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-5NXP0GE5CV',{ 'debug_mode':true });
+</script>
+
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
@@ -53,6 +62,50 @@ $cart = new Cart($dbContext, $session_id, $userId);
         <link href="/css/styles.css" rel="stylesheet" />
     </head>
     <body>
+
+
+    <?php 
+    
+    $googleItems = [];
+    foreach($cart->getItems() as $cartitem){
+        array_push($googleItems, [
+            
+            "quantity" => $cartitem->quantity,
+            "price" =>$cartitem->price,
+            "item_id"=>$cartitem->id,
+            "item_name"=>$cartitem->productName,
+        ]);
+    }
+    
+    ?>
+
+<script>
+gtag("event", "view_cart", {
+  currency: "SEK",
+  value: <?php echo $cart->getTotalPrice(); ?>,
+  items: [
+    <?php echo json_encode($googleItems); ?>
+  ]
+});
+
+
+
+function onCheckout(){
+    gtag("event", "begin_checkout", {
+    currency: "SEK",
+    value: <?php echo $cart->getTotalPrice(); ?>,
+    items: [
+        <?php echo json_encode($googleItems); ?>
+    ]
+    });
+
+}
+
+</script>    
+
+
+
+
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
@@ -158,7 +211,7 @@ $cart = new Cart($dbContext, $session_id, $userId);
                                 <td colspan="3"></td>
                                 <td id="totalPrice"><?php echo $cart->getTotalPrice(); ?></td>
                                 <td>
-                                    <a href="/checkout" class="btn btn-success">Checkout</a>
+                                    <a href="/checkout" onclick="onCheckout()" class="btn btn-success">Checkout</a>
                                 </td>
                             </tr>
                         </tfoot>

@@ -12,7 +12,10 @@ function SingleProduct($prod) { ?>
     <div class="card-body p-4">
         <div class="text-center">
             <!-- Product name-->
-            <h5 class="fw-bolder"><?php echo $prod->title; ?></h5>
+             <a href="/product?id=<?php echo $prod->id; ?>">
+            <h5 class="fw-bolder">
+                <?php echo $prod->title; ?></h5>
+            </a>
             <!-- Product price-->
             $<?php echo $prod->price; ?>.00
         </div>

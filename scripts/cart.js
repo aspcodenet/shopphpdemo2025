@@ -2,9 +2,29 @@
 
 
 
-function addToCart(productId, updateCartItemsTable=false) {
+
+
+function addToCart(productId, updateCartItemsTable=false,price=0,title="") {
     // Simulate adding to cart
     console.log(`Product ${productId} added to cart`);
+
+    gtag("event", "add_to_cart", {
+    currency: "SEK",
+    value: price,
+    items: [
+        {
+        item_id: productId,
+        item_name:title,
+        price: price,
+        quantity: 1
+        }
+    ]
+    });
+
+
+
+
+
 
     fetch(`/api/addToCart?productId=${productId}`, {
         method: 'GET',
@@ -26,7 +46,7 @@ function addToCart(productId, updateCartItemsTable=false) {
             cartItemsTable.innerHTML = ''; // Clear existing items
             data.cart.forEach(item => {
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${item.productName}</td><td>${item.quantity}</td><td>${item.productPrice}</td><td>${item.rowPrice}</td><td><a href="javascript:addToCart(${item.productId},  true)" class="btn btn-info">PLUS JS</a></td>`;
+                row.innerHTML = `<td>${item.productName}</td><td>${item.quantity}</td><td>${item.productPrice}</td><td>${item.rowPrice}</td><td><a href="javascript:addToCart(${item.productId},  true,${item.productPrice},'${item.productName})'" class="btn btn-info">PLUS JS</a></td>`;
                 cartItemsTable.appendChild(row);
             });
             document.getElementById('totalPrice').innerText = data.cartTotal;

@@ -75,8 +75,18 @@ $router->addRoute('/removeFromCart', function () { // Betyder ta bort EN
     require_once( __DIR__ .'/Pages/removeFromCart.php');
 });
 
+$router->addRoute('/checkout', function () { // Betyder ta bort EN 
+    require_once( __DIR__ .'/Pages/checkout.php');
+});
 
 
+$router->addRoute('/checkoutsuccess', function () { // Betyder ta bort EN 
+    require_once( __DIR__ .'/Pages/checkoutsuccess.php');
+});
+
+$router->addRoute('/product', function () { // Betyder ta bort EN 
+    require_once( __DIR__ .'/Pages/viewproduct.php');
+});
 
 
 
