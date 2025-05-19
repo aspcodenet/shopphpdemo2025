@@ -2,6 +2,7 @@
 
 
 require_once("vendor/autoload.php"); // LADDA ALLA DEPENDENCIES FROM VENDOR
+require_once("Models/Product.php"); // LADDA ALLA DEPENDENCIES FROM VENDOR
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -67,7 +68,7 @@ class SearchEngine{
         $query = [
             'query' => [
                 'query_string' => [
-                    'query' => $query . "*"
+                    'query' => $query 
                 ]
             ]
         ];
@@ -78,18 +79,48 @@ class SearchEngine{
             ]);
 
             $data = json_decode($response->getBody(), true);
-            var_dump($data);
 
             if (empty($data['hits']['total']['value'])) {
                 return null;
             }
+            //var_dump($data["hits"]["hits"]);
 
-            return  ["data"=>$data];
+            $data["hits"]["hits"] = $this->convertSearchEngineArrayToProduct($data["hits"]["hits"]);
+
+            return  ["data"=>$data["hits"]["hits"]];
         } catch (RequestException $e) {
             // Hantera eventuella fel här
             echo $e->getMessage();
             return null;
         }  
+    }
+
+
+    /*
+    array(4) { ["_index"]=> string(11) "products-12" ["_id"]=> string(20) "JevW55YBjv4AvNg2A_3B" ["_score"]=> float(1) ["_source"]=> array(9) { ["webid"]=> int(24) ["title"]=> string(18) "Sleek Cotton Clock" ["description"]=> string(127) "Fabric-covered clock with silent quartz movement. Minimalist design blends into any decor. Hidden stitching ensures durability." ["price"]=> int(10) ["categoryName"]=> int(5) ["stockLevel"]=> int(98) ["color"]=> string(5) "white" ["categoryid"]=> int(5) ["string_facet"]=> array(2) { [0]=> array(2) { ["facet_name"]=> string(5) "Color" ["facet_value"]=> string(5) "white" } [1]=> array(1) { ["facet_name"]=> string(8) "Category" } } } }
+    
+    */
+
+    function convertSearchEngineArrayToProduct($searchengineResults){
+        $newarray = [];
+        foreach($searchengineResults as $hit){
+            // echo "MUUU";
+            // var_dump($hit);
+            $prod = new Product();
+            $prod->searchengineid = $hit["_id"];
+            $prod->id = $hit["_source"]["webid"];
+            $prod->title = $hit["_source"]["title"];
+            $prod->description = $hit["_source"]["description"];
+            $prod->price = $hit["_source"]["price"];
+            $prod->categoryName = $hit["_source"]["categoryName"];
+            $prod->categoryId = $hit["_source"]["categoryId"];
+            $prod->color = $hit["_source"]["color"];
+            $prod->stockLevel = $hit["_source"]["color"];
+
+            array_push($newarray, $prod);
+        }
+        return $newarray;
+
     }
 
 

@@ -1,5 +1,7 @@
 <?php 
 
+
+
 function SingleProduct($prod) { ?>
 <div class="col mb-5">
 <div class="card h-100">
