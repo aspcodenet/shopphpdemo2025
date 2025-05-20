@@ -13,6 +13,9 @@ $dotenv->load();
 // Pilar istf .
 // \ istf .
 
+set_exception_handler('exception_handler');
+//set_error_handler('myCustomErrorHandler');
+
 $logger = require_once ("Utils/logging.php");
 
 
@@ -20,9 +23,9 @@ $logger->info("Startign");
 
 // import * as dotenv from 'dotenv';
 try{
-
     $router = new Router();
     $router->addRoute('/', function () {
+        global $logger;
         require_once( __DIR__ .'/Pages/index.php');
     });
     $router->addRoute('/category', function () {
@@ -100,6 +103,19 @@ try{
 catch(Exception $ex){
     $logger->error($ex->getTrace());
 }
+
+
+function exception_handler(Throwable $exception) {
+    global $logger;
+    $logger->error("exception",[$exception->getMessage()]);
+    $logger->error("exception",$exception->getTrace());
+}
+
+// function myCustomErrorHandler(int $errNo, string $errMsg, string $file, int $line) {
+//     global $logger;
+//     $logger->error("Custom error", [$errNo,$errMsg,$file,$line]);
+// }
+
 
 
 ?>

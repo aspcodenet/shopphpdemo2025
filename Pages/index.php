@@ -26,7 +26,6 @@ $cart = new Cart($dbContext, $session_id, $userId);
 
 
 
-
 // POPULÄRA PRODUKTER - product 1 to many reviews text+betyg
 // Vi gör enkelt : i products skapar vi PopularityFactor som är en int mellan 1-100
 // ju högre ju mer populär

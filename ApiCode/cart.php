@@ -16,6 +16,7 @@ if($dbContext->getUsersDatabase()->getAuth()->isLoggedIn()){
 $session_id = session_id();
 
 $cart = new Cart($dbContext, $session_id, $userId);
+
 $cart->addItem($productId, 1);
 
 

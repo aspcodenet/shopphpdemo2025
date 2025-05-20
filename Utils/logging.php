@@ -40,6 +40,7 @@ class OpenObserveHandler extends \Monolog\Handler\AbstractProcessingHandler
     private $auth;
     private $organization;
     private $stream;
+    private $token;
     
     public function __construct($level = Logger::DEBUG, $bubble = true)
     {
@@ -50,6 +51,7 @@ class OpenObserveHandler extends \Monolog\Handler\AbstractProcessingHandler
         $this->organization = $_ENV['OPENOBSERVE_ORGANIZATION'];
         $this->stream = $_ENV['OPENOBSERVE_STREAM'];
         $this->auth = base64_encode($_ENV['OPENOBSERVE_USERNAME'] . ':' . $_ENV['OPENOBSERVE_PASSWORD']);
+        //die($this->auth);
     }
     
     // Monolog 3.x compatible write method
@@ -69,6 +71,7 @@ class OpenObserveHandler extends \Monolog\Handler\AbstractProcessingHandler
         
         try {
             $this->client->post($endpoint, [
+                'verify' => false,
                 'headers' => [
                     'Authorization' => 'Basic ' . $this->auth,
                     'Content-Type' => 'application/json'
@@ -77,7 +80,8 @@ class OpenObserveHandler extends \Monolog\Handler\AbstractProcessingHandler
             ]);
         } catch (\Exception $e) {
             // Write to error log if sending to OpenObserve fails
-            error_log('Failed to send log to OpenObserve: ' . $e->getMessage());
+            die($e->getMessage());
+            //error_log('Failed to send log to OpenObserve: ' . $e->getMessage());
         }
     }
 }
