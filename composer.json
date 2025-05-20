@@ -5,7 +5,8 @@
         "mbezhanov/faker-provider-collection": "^2.0",
         "phpmailer/phpmailer": "^6.9",
         "stripe/stripe-php": "^17.2",
-        "guzzlehttp/guzzle": "^7.9"
+        "guzzlehttp/guzzle": "^7.9",
+        "monolog/monolog": "^3.9"
     },
     "config": {
         "allow-plugins": {
