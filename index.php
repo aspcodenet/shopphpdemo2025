@@ -10,18 +10,24 @@ require_once("vendor/autoload.php"); // LADDA ALLA DEPENDENCIES FROM VENDOR
 //  :: en STATIC funktion
 $dotenv = Dotenv\Dotenv::createImmutable("."); // . is  current folder for the PAGE
 $dotenv->load();
+require_once('Utils/OurLogger.php');
 // Pilar istf .
 // \ istf .
+set_exception_handler('exception_handler');
 
 // import * as dotenv from 'dotenv';
+//$logger = require_once ("Utils/Logging.php");
+//$logger->info("Hej hej nu tar vi rast");
 
 
 
 $router = new Router();
 $router->addRoute('/', function () {
+    global $logger;
     require_once( __DIR__ .'/Pages/index.php');
 });
 $router->addRoute('/category', function () {
+    global $logger;
     require_once( __DIR__ .'/Pages/category.php');
 });
 $router->addRoute('/admin/products', function () {
@@ -57,6 +63,13 @@ $router->addRoute('/search', function () {
 });
 
 $router->dispatch();
+
+
+function exception_handler(Throwable $exception) {
+    $logger = OurLogger::GetInstance();
+    $logger->error("exception",[$exception->getMessage()]);
+    $logger->error("exception",$exception->getTrace());
+}
 ?>
 
 

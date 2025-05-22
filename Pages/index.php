@@ -11,6 +11,11 @@ require_once("Models/Database.php");
 
 $dbContext = new Database();
 
+$x = 0;
+if($x == 0){
+    $logger->info("X är 0");
+}
+
 
 // POPULÄRA PRODUKTER - product 1 to many reviews text+betyg
 // Vi gör enkelt : i products skapar vi PopularityFactor som är en int mellan 1-100
