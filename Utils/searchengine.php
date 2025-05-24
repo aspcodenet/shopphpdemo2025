@@ -17,18 +17,18 @@ $dotenv->load();
 
 class SearchEngine{
     // Nr 12
-    // private $accessKey = 'PDsMUOHw78Og_J-gjGvujQ';
-    // private $secretKey='1KKc3cT5LTtRYckYKtPpCfe19H_P_Q';
-    // private $url = "https://betasearch.systementor.se";
-    // private $index_name = "products-12";
+    private $accessKey = 'PDsMUOHw78Og_J-gjGvujQ';
+    private $secretKey='1KKc3cT5LTtRYckYKtPpCfe19H_P_Q';
+    private $url = "https://betasearch.systementor.se";
+    private $index_name = "products-12";
 
 
     // Nr 5
-    private $accessKey = 'MHPD-epV-6ZygsphezEPxw';
-    private $secretKey='sTcru3VjnlVs1fgDTY91hmT0otD8Cw';
-    private $url = "http://localhost:8080";
+    // private $accessKey = 'MHPD-epV-6ZygsphezEPxw';
+    // private $secretKey='sTcru3VjnlVs1fgDTY91hmT0otD8Cw';
+    // private $url = "http://localhost:8080";
 
-    private $index_name = "products-5";
+    // private $index_name = "products-5";
 
     private  $client;
 
