@@ -18,7 +18,7 @@ $pageSize = $_GET['pageSize'] ?? "10";
 
 $searchEngine = new SearchEngine();
 
-$result = $searchEngine->search($q);//,$sortCol, $sortOrder, $pageNo, $pageSize); // $result är en array med två element: $data och $num_pages
+$result = $searchEngine->search($q,$sortCol, $sortOrder, $pageNo, $pageSize); // $result är en array med två element: $data och $num_pages
 //$result = $dbContext->searchProducts($q,$sortCol, $sortOrder, $pageNo, $pageSize); // $result är en array med två element: $data och $num_pages
 // $result["data"] = arrayen med produkter
 // $result["num_pages"] = antalet sidor i databasen

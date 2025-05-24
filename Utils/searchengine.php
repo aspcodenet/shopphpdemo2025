@@ -16,10 +16,19 @@ $dotenv->load();
 
 
 class SearchEngine{
-    private $accessKey = 'PDsMUOHw78Og_J-gjGvujQ';
-    private $secretKey='1KKc3cT5LTtRYckYKtPpCfe19H_P_Q';
-    private $url = "https://betasearch.systementor.se";
-    private $index_name = "products-12";
+    // Nr 12
+    // private $accessKey = 'PDsMUOHw78Og_J-gjGvujQ';
+    // private $secretKey='1KKc3cT5LTtRYckYKtPpCfe19H_P_Q';
+    // private $url = "https://betasearch.systementor.se";
+    // private $index_name = "products-12";
+
+
+    // Nr 5
+    private $accessKey = 'MHPD-epV-6ZygsphezEPxw';
+    private $secretKey='sTcru3VjnlVs1fgDTY91hmT0otD8Cw';
+    private $url = "http://localhost:8080";
+
+    private $index_name = "products-5";
 
     private  $client;
 
@@ -64,13 +73,20 @@ class SearchEngine{
         }
     }
 
-    function search(string $query){
+    function search(string $query,string $sortCol, string $sortOrder, int $pageNo, int $pageSize){
         $query = [
             'query' => [
                 'query_string' => [
-                    'query' => $query 
+                    'query' => $query . '*',
                 ]
-            ]
+                ],
+                'from' => ($pageNo - 1) * $pageSize,
+                'size' => $pageSize,
+                'sort' => [
+                    $sortCol => [
+                        'order' => $sortOrder
+                    ]
+                ]
         ];
 
         try {
@@ -86,8 +102,10 @@ class SearchEngine{
             //var_dump($data["hits"]["hits"]);
 
             $data["hits"]["hits"] = $this->convertSearchEngineArrayToProduct($data["hits"]["hits"]);
+            $pages = ceil($data["hits"]["total"]["value"] / $pageSize);
 
-            return  ["data"=>$data["hits"]["hits"]];
+            return  ["data"=>$data["hits"]["hits"],
+                     "num_pages"=>$pages];
         } catch (RequestException $e) {
             // Hantera eventuella fel här
             echo $e->getMessage();
