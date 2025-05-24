@@ -74,10 +74,12 @@ class SearchEngine{
     }
 
     function search(string $query,string $sortCol, string $sortOrder, int $pageNo, int $pageSize){
+        $aa = $query . '*';
+//        $aa = " and color:silver";
         $query = [
             'query' => [
                 'query_string' => [
-                    'query' => $query . '*',
+                    'query' => $aa,
                 ]
                 ],
                 'from' => ($pageNo - 1) * $pageSize,
@@ -86,7 +88,31 @@ class SearchEngine{
                     $sortCol => [
                         'order' => $sortOrder
                     ]
-                ]
+                    ],
+             'aggs' => [
+                'facets'=> [
+                    'nested' => [
+                        'path' => 'string_facet',
+
+                    ],
+                    'aggs' => [
+                        'names' => [
+                            'terms' => [
+                                'field' => 'string_facet.facet_name',
+                                'size' => 10
+                            ],
+                            'aggs' => [
+                                'values' => [
+                                    'terms' => [
+                                        'field' => 'string_facet.facet_value',
+                                        'size' => 10
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            ]
         ];
 
         try {
@@ -99,13 +125,15 @@ class SearchEngine{
             if (empty($data['hits']['total']['value'])) {
                 return null;
             }
-            //var_dump($data["hits"]["hits"]);
+            //print_r($data["aggregations"]["facets"]['names']['buckets'] );
 
             $data["hits"]["hits"] = $this->convertSearchEngineArrayToProduct($data["hits"]["hits"]);
             $pages = ceil($data["hits"]["total"]["value"] / $pageSize);
 
             return  ["data"=>$data["hits"]["hits"],
-                     "num_pages"=>$pages];
+                     "num_pages"=>$pages,
+                     "aggregations"=>$data["aggregations"]["facets"]['names']['buckets']
+                    ];
         } catch (RequestException $e) {
             // Hantera eventuella fel här
             echo $e->getMessage();

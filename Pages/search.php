@@ -10,8 +10,8 @@ require_once("Utils/SearchEngine.php");
 $dbContext = new Database();
 
 $q = $_GET['q'] ?? "";
-$sortCol = $_GET['sortCol'] ?? "";
-$sortOrder = $_GET['sortOrder'] ?? "";
+$sortCol = $_GET['sortCol'] ?? "title";
+$sortOrder = $_GET['sortOrder'] ?? "asc";
 $pageNo = $_GET['pageNo'] ?? "1";
 
 $pageSize = $_GET['pageSize'] ?? "10";
@@ -100,17 +100,35 @@ $result = $searchEngine->search($q,$sortCol, $sortOrder, $pageNo, $pageSize); //
         </header>
         <!-- Section-->
         <section class="py-5">
-            <div class="container px-4 px-lg-5 mt-5">
-                <div class="text-center mb-4">
-
+            <div class="container px-4 px-lg-5 mt-5 d-flex gap-3">
+                <div>                
+                    <div class="text-center mb-4">
                         <a href="?sortCol=title&sortOrder=asc&q=<?php echo $q;?>" class="btn btn-secondary">Title asc</a>
                         <a href="?sortCol=title&sortOrder=desc&q=<?php echo $q;?>" class="btn btn-secondary">Title desc</a>
                         <a href="?sortCol=price&sortOrder=asc&q=<?php echo $q;?>" class="btn btn-secondary">Price asc</a>
                         <a href="?sortCol=price&sortOrder=desc&q=<?php echo $q;?>" class="btn btn-secondary">Price desc</a>
+                    </div>
+
+                    <div class="text-center mb-4">
+                        <?php  foreach( $result["aggregations"] as $agg  ) { ?>
+                            <h3><?php echo $agg["key"]; ?></h3>
+                            <p>
+                                <?php foreach( $agg["values"]["buckets"] as $bucket ) { ?>
+                                    <div>
+                                    <a href="">
+                                        <?php echo $bucket["key"]; ?> (<?php echo $bucket["doc_count"]; ?>)
+                                    </a>
+                                    </div>
+                                <?php }?>
+                            </p>
+                            
+
+                            
+                        <?php } ?>
+                    </div>
                 </div>
 
-
-                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div>                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 
                 <?php 
                     foreach($result["data"] as $prod){
@@ -118,6 +136,12 @@ $result = $searchEngine->search($q,$sortCol, $sortOrder, $pageNo, $pageSize); //
                      } ?>  
                           
                 </div>
+            </div>
+            </div>
+ 
+            <div class="container px-4 px-lg-5 mt-5">
+
+
 
                 <nav >
                     <ul class="pagination justify-content-center">
