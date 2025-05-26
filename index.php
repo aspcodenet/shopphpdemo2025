@@ -13,6 +13,7 @@ $dotenv->load();
 require_once('Utils/OurLogger.php');
 // Pilar istf .
 // \ istf .
+
 set_exception_handler('exception_handler');
 
 // import * as dotenv from 'dotenv';
@@ -23,11 +24,9 @@ set_exception_handler('exception_handler');
 
 $router = new Router();
 $router->addRoute('/', function () {
-    global $logger;
     require_once( __DIR__ .'/Pages/index.php');
 });
 $router->addRoute('/category', function () {
-    global $logger;
     require_once( __DIR__ .'/Pages/category.php');
 });
 $router->addRoute('/admin/products', function () {

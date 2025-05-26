@@ -2,6 +2,7 @@
 require_once('Models/Product.php');
 require_once("components/Footer.php");
 require_once('Models/Database.php');
+require_once('Utils/OurLogger.php');
 
 $dbContext = new Database();
 
@@ -19,12 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             exit;
         } 
         catch (\Delight\Auth\InvalidEmailException $e) {
+
             $errorMessage = "Ej korrekt email";
         }
         catch (\Delight\Auth\InvalidPasswordException $e) {
             $errorMessage = "Invalid password";
         }    
         catch (\Delight\Auth\UserAlreadyExistsException $e) {
+            OurLogger::GetInstance()->error("User already exists", [$username]);
             $errorMessage = "Finns redan";
         }    
         catch (\Exception $e) {

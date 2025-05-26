@@ -8,12 +8,13 @@
 require_once("Models/Product.php");
 require_once("components/Footer.php");
 require_once("Models/Database.php");
+require_once("Utils/OurLogger.php");
 
 $dbContext = new Database();
 
 $x = 0;
 if($x == 0){
-    $logger->info("X är 0");
+    OurLogger::GetInstance()->info("X är 0");
 }
 
 

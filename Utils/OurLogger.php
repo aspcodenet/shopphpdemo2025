@@ -1,6 +1,7 @@
 <?php
 
 
+
 class OurLogger{
     private static $instance;
 
@@ -16,4 +17,5 @@ class OurLogger{
     }
 };
 
+ 
 ?>
