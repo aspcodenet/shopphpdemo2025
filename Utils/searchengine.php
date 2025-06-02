@@ -17,10 +17,10 @@ $dotenv->load();
 
 class SearchEngine{
     // Nr 12
-    private $accessKey = 'PDsMUOHw78Og_J-gjGvujQ';
-    private $secretKey='1KKc3cT5LTtRYckYKtPpCfe19H_P_Q';
+    private $accessKey = 'qLidn4cVx6dS8dhJ6zRCHw';
+    private $secretKey='7JByYAMA4aMbRLtCH8WdBauMfu_ENQ';
     private $url = "https://betasearch.systementor.se";
-    private $index_name = "products-12";
+    private $index_name = "products-13";
 
 
     // Nr 5
@@ -73,7 +73,13 @@ class SearchEngine{
         }
     }
 
+    // Integration med tredjepartssystem: REST/JSON, Filer (XML mot Prisjakt) - språk/regelverk att förhålla sig till
+
     function search(string $query,string $sortCol, string $sortOrder, int $pageNo, int $pageSize){
+        // "språk" mot sökmotorn
+        // offset, limit, 
+        // 50, 10
+        // from  , size
         $aa = $query . '*';
 //        $aa = " and color:silver";
         $query = [
