@@ -128,6 +128,7 @@ class SearchEngine{
 
             $data = json_decode($response->getBody(), true);
 
+                             // data.hits.total.value
             if (empty($data['hits']['total']['value'])) {
                 return null;
             }
