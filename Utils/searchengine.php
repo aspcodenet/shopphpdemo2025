@@ -81,55 +81,43 @@ class SearchEngine{
         // 50, 10
         // from  , size
         $aa = "";
-        foreach($facets as $facet){
-            if($aa != ""){
-                $aa .= " AND ";
-            } 
-            $aa = $aa .  $facet[0] . ":" .  implode(" or " , $facet[1]) ;
-        }
-        if($aa != ""){
-            $aa = $aa . " AND ";
-        }
+        // foreach($facets as $facet){
+        //     if($aa != ""){
+        //         $aa .= " AND ";
+        //     } 
+        //     $aa = $aa .  $facet[0] . ":" .  implode(" or " , $facet[1]) ;
+        // }
+        // if($aa != ""){
+        //     $aa = $aa . " AND ";
+        // }
 
-        $aa = $aa . " combinedsearchtext:" . $query . '*';        
+        $aa = $aa . " combinedsearchtext:" . $query . '*';     
+
         $query = [
             'query' => [
-                'query_string' => [
-                    'query' => $aa,
+                            'query_string' => [
+                                'query' =>  $aa
+                            ],
+                
+            ],
+            'post_filter' => [
+                
+                'bool' => [
+                    'must' => $this->getAllTerms($facets,"") 
+                            ]],
+            'from' => ($pageNo - 1) * $pageSize,
+            'size' => $pageSize,
+            'sort' => [
+                $sortCol => [
+                    'order' => $sortOrder
                 ]
                 ],
-                'from' => ($pageNo - 1) * $pageSize,
-                'size' => $pageSize,
-                'sort' => [
-                    $sortCol => [
-                        'order' => $sortOrder
-                    ]
-                    ],
-             'aggs' => [
-                'facets'=> [
-                    'nested' => [
-                        'path' => 'string_facet',
+            'aggs'=>$this->GetAggs($facets)
 
-                    ],
-                    'aggs' => [
-                        'names' => [
-                            'terms' => [
-                                'field' => 'string_facet.facet_name',
-                                'size' => 10
-                            ],
-                            'aggs' => [
-                                'values' => [
-                                    'terms' => [
-                                        'field' => 'string_facet.facet_value',
-                                        'size' => 10
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-            ]
         ];
+
+
+        //echo "QUERY: " . json_encode($query)  . "</br>";   
 
         try {
             $response = $this->client->post("/api/index/v1/{$this->index_name}/_search", [
@@ -147,15 +135,122 @@ class SearchEngine{
             $data["hits"]["hits"] = $this->convertSearchEngineArrayToProduct($data["hits"]["hits"]);
             $pages = ceil($data["hits"]["total"]["value"] / $pageSize);
 
+            //var_dump($data["aggregations"]);
+            //var_dump($data["aggregations"]["aggs_Color"]["facets"]["aggs_special"]["names"]["buckets"]["0"]["values"]["buckets"]);
             return  ["data"=>$data["hits"]["hits"],
                      "num_pages"=>$pages,
-                     "aggregations"=>$data["aggregations"]["facets"]['names']['buckets']
+                     "aggregations_color"=>$data["aggregations"]["aggs_Color"]["facets"]["aggs_special"]["names"]["buckets"]["0"]["values"]["buckets"],
+                     "aggregations_categoryName"=>$data["aggregations"]["aggs_Category"]["facets"]["aggs_special"]["names"]["buckets"]["0"]["values"]["buckets"],
                     ];
         } catch (RequestException $e) {
             // Hantera eventuella fel här
             echo $e->getMessage();
             return null;
         }  
+    }
+
+
+    function getAllTerms($facets, $current){
+        $terms = [];
+        foreach($facets as $facet){
+            if($current == $facet[0]){
+                    continue;
+            }
+            $term = [];
+            $term["term"] = [];
+            $term["term"][$facet[0]] = implode(",",$facet[1]); // TODO FLERA 
+            array_push($terms, $term);
+        }
+        return $terms;
+    }
+
+    function GetAggs($facets){
+        $aggs = [];
+
+
+         
+
+
+        foreach(["Category","Color"] as $facet){
+
+            $aggsFacet = [
+                    'facets' => [
+                        'nested' => [
+                            'path' => 'string_facet'
+                        ],
+                        'aggs' => [
+                            'aggs_special' => [
+                                'filter' => [
+                                    'match' => [
+                                        'string_facet.facet_name' => "$facet"
+                                    ]
+                                ],
+                                'aggs' => [
+                                    'names' => [
+                                        'terms' => [
+                                            'field' => 'string_facet.facet_name'
+                                        ],
+                                        'aggs' => [
+                                            'values' => [
+                                                'terms' => [
+                                                    'field' => 'string_facet.facet_value'
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];   
+
+            $aggs["aggs_$facet"]  = [
+                    "aggs" => $aggsFacet
+            ];
+            $f = $this->setFilter($facet, $facets[$facet]);
+            if($f != null){
+                $aggs["aggs_$facet"]['filter'] = $f;
+            }else{
+                $aggs["aggs_$facet"]['filter'] = [
+                    'match_all' => new \stdClass()
+                ];
+            }
+
+
+        }
+//        var_dump($aggs);
+
+        return $aggs;
+    }
+
+    function setFilter($facet, $values){
+        if($values == null || count($values) == 0){
+            return null;
+        }
+$filter = [
+    [
+        'nested' => [
+            'path' => 'string_facet',
+            'query' => [
+                'bool' => [
+                    'filter' => [
+                        [
+                            'term' => [
+                                'string_facet.facet_name' => "$facet"
+                            ]
+                        ],
+                        [
+                            'term' => [
+                                'string_facet.facet_value' => "$values"
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ]
+];
+        return $filter;
     }
 
 

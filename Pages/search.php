@@ -123,12 +123,11 @@ $currentUrl = $_SERVER['REQUEST_URI'];
                     </div>
 
                     <div class="text-center mb-4">
-                        <?php  foreach( $result["aggregations"] as $agg  ) { ?>
-                            <h3><?php echo $agg["key"]; ?></h3>
+                            <h3>Categories</h3>
                             <p>
-                                <?php foreach( $agg["values"]["buckets"] as $bucket ) { ?>
+                                <?php foreach( $result["aggregations_categoryName"] as $bucket ) { ?>
                                     <div>
-                                    <a href="<?php echo UrlModifier::addParameters($currentUrl,[$agg["key"]=>$bucket["key"]]) ?>">
+                                    <a href="<?php echo UrlModifier::addParameters($currentUrl,["Category"=>$bucket["key"]]) ?>">
                                         <?php echo $bucket["key"]; ?> (<?php echo $bucket["doc_count"]; ?>)
                                     </a>
                                     </div>
@@ -137,8 +136,27 @@ $currentUrl = $_SERVER['REQUEST_URI'];
                             
 
                             
-                        <?php } ?>
                     </div>
+
+                    <div class="text-center mb-4">
+                            <h3>Color</h3>
+                            <p>
+                                <?php  echo var_dump($result["aggregations_color"]); ?>
+                                <?php foreach( $result["aggregations_color"] as $bucket ) { ?>
+                                    <div>
+                                    <a href="<?php echo UrlModifier::addParameters($currentUrl,["Color"=>$bucket["key"]]) ?>">
+                                        <?php echo $bucket["key"]; ?> (<?php echo $bucket["doc_count"]; ?>)
+                                    </a>
+                                    </div>
+                                <?php }?>
+                            </p>
+                            
+
+                            
+                    </div>
+
+
+
                 </div>
 
                 <div>                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
