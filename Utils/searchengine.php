@@ -75,13 +75,23 @@ class SearchEngine{
 
     // Integration med tredjepartssystem: REST/JSON, Filer (XML mot Prisjakt) - språk/regelverk att förhålla sig till
 
-    function search(string $query,string $sortCol, string $sortOrder, int $pageNo, int $pageSize){
+    function search(string $query,string $sortCol, string $sortOrder, int $pageNo, int $pageSize,$facets){
         // "språk" mot sökmotorn
         // offset, limit, 
         // 50, 10
         // from  , size
-        $aa = $query . '*';
-//        $aa = " and color:silver";
+        $aa = "";
+        foreach($facets as $facet){
+            if($aa != ""){
+                $aa .= " AND ";
+            } 
+            $aa = $aa .  $facet[0] . ":" .  implode(" or " , $facet[1]) ;
+        }
+        if($aa != ""){
+            $aa = $aa . " AND ";
+        }
+
+        $aa = $aa . " combinedsearchtext:" . $query . '*';        
         $query = [
             'query' => [
                 'query_string' => [

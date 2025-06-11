@@ -6,6 +6,7 @@ require_once("components/Footer.php");
 require_once("Models/Database.php");
 require_once("components/SingleProduct.php");
 require_once("Utils/SearchEngine.php");
+require_once("Utils/UrlModifier.php");
 
 $dbContext = new Database();
 
@@ -18,7 +19,19 @@ $pageSize = $_GET['pageSize'] ?? "10";
 
 $searchEngine = new SearchEngine();
 
-$result = $searchEngine->search($q,$sortCol, $sortOrder, $pageNo, $pageSize); // $result är en array med två element: $data och $num_pages
+$facets = [];
+if(isset($_GET["Category"])){
+    $facets[] = ["categoryName", explode(",",$_GET["Category"])];   
+}
+
+if(isset($_GET["Color"])){
+    $facets[] = ["color", explode(",",$_GET["Color"])];   
+}
+
+
+$result = $searchEngine->search($q,$sortCol, $sortOrder, $pageNo, $pageSize,$facets); // $result är en array med två element: $data och $num_pages
+
+$currentUrl = $_SERVER['REQUEST_URI'];
 //$result = $dbContext->searchProducts($q,$sortCol, $sortOrder, $pageNo, $pageSize); // $result är en array med två element: $data och $num_pages
 // $result["data"] = arrayen med produkter
 // $result["num_pages"] = antalet sidor i databasen
@@ -103,10 +116,10 @@ $result = $searchEngine->search($q,$sortCol, $sortOrder, $pageNo, $pageSize); //
             <div class="container px-4 px-lg-5 mt-5 d-flex gap-3">
                 <div>                
                     <div class="text-center mb-4">
-                        <a href="?sortCol=title&sortOrder=asc&q=<?php echo $q;?>" class="btn btn-secondary">Title asc</a>
-                        <a href="?sortCol=title&sortOrder=desc&q=<?php echo $q;?>" class="btn btn-secondary">Title desc</a>
-                        <a href="?sortCol=price&sortOrder=asc&q=<?php echo $q;?>" class="btn btn-secondary">Price asc</a>
-                        <a href="?sortCol=price&sortOrder=desc&q=<?php echo $q;?>" class="btn btn-secondary">Price desc</a>
+                        <a class="btn btn-secondary" href="<?php echo UrlModifier::changeParameters($currentUrl,["sortCol"=>"title","sortOrder"=>"asc"]) ?>">Title asc</a>
+                        <a class="btn btn-secondary" href="<?php echo UrlModifier::changeParameters($currentUrl,["sortCol"=>"title","sortOrder"=>"desc"]) ?>">Title desc</a>
+                        <a class="btn btn-secondary" href="<?php echo UrlModifier::changeParameters($currentUrl,["sortCol"=>"price","sortOrder"=>"asc"]) ?>">Price asc</a>
+                        <a class="btn btn-secondary" href="<?php echo UrlModifier::changeParameters($currentUrl,["sortCol"=>"price","sortOrder"=>"desc"]) ?>">Price desc</a>
                     </div>
 
                     <div class="text-center mb-4">
@@ -115,7 +128,7 @@ $result = $searchEngine->search($q,$sortCol, $sortOrder, $pageNo, $pageSize); //
                             <p>
                                 <?php foreach( $agg["values"]["buckets"] as $bucket ) { ?>
                                     <div>
-                                    <a href="">
+                                    <a href="<?php echo UrlModifier::addParameters($currentUrl,[$agg["key"]=>$bucket["key"]]) ?>">
                                         <?php echo $bucket["key"]; ?> (<?php echo $bucket["doc_count"]; ?>)
                                     </a>
                                     </div>
