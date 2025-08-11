@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL & ~E_DEPRECATED);
 // Denna fil kommer alltid att laddas in först
 // vi ska mappa urler mot Pages
 // om url = "/admin" så visa admin.php
@@ -65,9 +66,9 @@ $router->dispatch();
 
 
 function exception_handler(Throwable $exception) {
-    $logger = OurLogger::GetInstance();
-    $logger->error("exception",[$exception->getMessage()]);
-    $logger->error("exception",$exception->getTrace());
+    // $logger = OurLogger::GetInstance();
+    // $logger->error("exception",[$exception->getMessage()]);
+    // $logger->error("exception",$exception->getTrace());
 }
 ?>
 

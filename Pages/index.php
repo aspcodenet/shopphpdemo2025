@@ -12,10 +12,10 @@ require_once("Utils/OurLogger.php");
 
 $dbContext = new Database();
 
-$x = 0;
-if($x == 0){
-    OurLogger::GetInstance()->info("X är 0");
-}
+// $x = 0;
+// if($x == 0){
+//     OurLogger::GetInstance()->info("X är 0");
+// }
 
 
 // POPULÄRA PRODUKTER - product 1 to many reviews text+betyg
