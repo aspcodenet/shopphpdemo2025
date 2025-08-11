@@ -1,0 +1,48 @@
+{
+	"servers": {
+		"mysql": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"@benborla29/mcp-server-mysql@2.0.5"
+			],
+			"env": {
+				"MYSQL_HOST": "${input:mysql_host}",
+				"MYSQL_PORT": "${input:mysql_port}",
+				"MYSQL_USER": "${input:mysql_user}",
+				"MYSQL_PASS": "${input:mysql_pass}",
+				"MYSQL_DB": "${input:mysql_db}",
+				"ALLOW_INSERT_OPERATION": "false",
+				"ALLOW_UPDATE_OPERATION": "false",
+				"ALLOW_DELETE_OPERATION": "false"
+			}
+		}
+	},
+	"inputs": [
+		{
+			"id": "mysql_host",
+			"type": "promptString",
+			"description": "MySQL Hostname"
+		},
+		{
+			"id": "mysql_port",
+			"type": "promptString",
+			"description": "MySQL Port"
+		},
+		{
+			"id": "mysql_user",
+			"type": "promptString",
+			"description": "MySQL Username"
+		},
+		{
+			"id": "mysql_pass",
+			"type": "promptString",
+			"description": "MySQL Password"
+		},
+		{
+			"id": "mysql_db",
+			"type": "promptString",
+			"description": "MySQL Database Name (leave blank for multi-DB mode)"
+		}
+	]
+}

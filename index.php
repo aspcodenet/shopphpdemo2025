@@ -62,7 +62,13 @@ $router->addRoute('/search', function () {
     require_once( __DIR__ .'/Pages/search.php');
 });
 
+$router->addRoute('/shopdemo', function () {
+    require_once(__DIR__ . '/Pages/shopdemo.php');
+});
+
+
 $router->dispatch();
+
 
 
 function exception_handler(Throwable $exception) {
