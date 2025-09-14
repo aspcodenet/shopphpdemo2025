@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
                 <input type="password" class="form-control" name="password" value="">
             </div>
             <input type="submit" class="btn btn-primary" value="Login">
-            <a href="/register" class="btn btn-secondary">Register</a>
+            <a href="/user/register" class="btn btn-secondary">Register</a>
             <a href="/forgot" class="btn btn-secondary">Forgot password</a>
         </form>
 

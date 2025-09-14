@@ -28,6 +28,10 @@ try{
         global $logger;
         require_once( __DIR__ .'/Pages/index.php');
     });
+    $router->addRoute('/abbonemang', function () {
+        global $logger;
+        require_once( __DIR__ .'/Pages/abbonemang.php');
+    });
     $router->addRoute('/category', function () {
         require_once( __DIR__ .'/Pages/category.php');
     });
