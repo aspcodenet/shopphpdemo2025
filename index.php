@@ -5,6 +5,8 @@
 // om url = "/edit" så visa edit.php
 // om url = "/" så visa index.php
 
+error_reporting(E_ALL & ~E_DEPRECATED);
+
 require_once("Utils/router.php"); // LADDAR IN ROUTER KLASSEN
 require_once("vendor/autoload.php"); // LADDA ALLA DEPENDENCIES FROM VENDOR
 //  :: en STATIC funktion
@@ -13,8 +15,6 @@ $dotenv->load();
 // Pilar istf .
 // \ istf .
 
-set_exception_handler('exception_handler');
-//set_error_handler('myCustomErrorHandler');
 
 $logger = require_once ("Utils/logging.php");
 
@@ -104,17 +104,6 @@ catch(Exception $ex){
     $logger->error($ex->getTrace());
 }
 
-
-function exception_handler(Throwable $exception) {
-    global $logger;
-    $logger->error("exception",[$exception->getMessage()]);
-    $logger->error("exception",$exception->getTrace());
-}
-
-// function myCustomErrorHandler(int $errNo, string $errMsg, string $file, int $line) {
-//     global $logger;
-//     $logger->error("Custom error", [$errNo,$errMsg,$file,$line]);
-// }
 
 
 
